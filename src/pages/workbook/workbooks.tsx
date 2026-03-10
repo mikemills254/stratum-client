@@ -8,7 +8,7 @@ import {
     CheckCircle2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Wrapper from '../../components/wrapper';
+import Wrapper from '../../components/ui/wrapper';
 import { useAuthStore } from '../../store/authStore';
 import { handleGetWorkBooks } from '@/api/workbook';
 import toast from 'react-hot-toast';

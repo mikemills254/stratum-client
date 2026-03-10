@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthLayout } from '../../components/authLayout';
+import { AuthLayout } from '../../components/ui/authLayout';
 import { useAuthStore } from '../../store/authStore';
 import { handleVerifyTwoFactor, handleRequestTwoFactor } from '../../api/auth';
 

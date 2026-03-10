@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, FileText, CheckCircle, MessageSquare, Send, Plus, Pencil, Trash2, ChevronRight, ChevronDown, HelpCircle } from 'lucide-react';
-import Editor from '../../components/editor';
-import { api } from '@/utilities/config';
-import { handleGetWorksheetsByWorkbook, handleDeleteWorksheet } from '@/api/worksheet';
-import { handleDeleteQuestion } from '@/api/question';
-import { handleGetWorkbookStats } from '@/api/workbook';
-import { handleCreateAnnotation, handleDeleteAnnotation, handleUpdateAnnotation } from '@/api/annotation';
-import { handleAssignGrade } from '@/api/grade';
-import CreateWorksheetModal from '../../components/dashboard/CreateWorksheetModal';
-import EditWorksheetModal from '../../components/dashboard/EditWorksheetModal';
-import CreateQuestionModal from '../../components/dashboard/CreateQuestionModal';
-import EditQuestionModal from '../../components/dashboard/EditQuestionModal';
-import ActivityLog from '../../components/dashboard/ActivityLog';
-import { type Worksheet as IWorksheet, type Question as IQuestion } from '@/types/worksheets';
+import Editor from '../../components/ui/editor';
+import { handleGetWorksheetsByWorkbook, handleDeleteWorksheet } from '../../api/worksheet';
+import { handleDeleteQuestion } from '../../api/question';
+import { handleGetWorkbookStats } from '../../api/workbook';
+import { handleCreateAnnotation, handleDeleteAnnotation, handleUpdateAnnotation } from '../../api/annotation';
+import { handleAssignGrade } from '../../api/grade';
+import CreateWorksheetModal from '../../components/dashboard/createWorksheetModal';
+import EditWorksheetModal from '../../components/dashboard/editWorksheetModal';
+import CreateQuestionModal from '../../components/dashboard/createQuestionModal';
+import EditQuestionModal from '../../components/dashboard/editQuestionModal';
+import ActivityLog from '../../components/dashboard/activityLog';
+import { type Worksheet as IWorksheet, type Question as IQuestion } from '../../types/worksheets';
 
-import type { Worksheet, Question } from '@/types/worksheets';
-import type { IAnswer } from '@/types/answers';
-import type { IWorkbookStats } from '@/types/workbooks';
+import type { Worksheet, Question } from '../../types/worksheets';
+import type { IAnswer } from '../../types/answers';
+import type { IWorkbookStats } from '../../types/workbooks';
+import { api } from '../../utilities/config';
 
 interface TeacherDashboardProps {
     workbookId: string;

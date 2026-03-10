@@ -9,10 +9,10 @@ import {
     ChevronRight
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useAuthStore } from '../store/authStore';
-import { useSidebarStore } from '../store/sidebarStore';
+import { useAuthStore } from '../../store/authStore';
+import { useSidebarStore } from '../../store/sidebarStore';
 import { Role } from '@/types/types';
+import { useAuth } from '../../contexts/authContext';
 
 export default function SideBar() {
     const navigate = useNavigate();

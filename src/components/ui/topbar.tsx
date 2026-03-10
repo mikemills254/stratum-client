@@ -1,6 +1,6 @@
 import { Search, Bell, ChevronDown, User, Menu } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
-import { useSidebarStore } from '../store/sidebarStore';
+import { useAuthStore } from '../../store/authStore';
+import { useSidebarStore } from '../../store/sidebarStore';
 
 export default function TopBar() {
     const { user } = useAuthStore();

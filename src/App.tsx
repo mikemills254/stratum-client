@@ -6,11 +6,11 @@ import TwoFactorPage from './pages/auth/2fa';
 import ForgotPasswordPage from './pages/auth/forgotpass';
 import WorkbookPage from './pages/workbook/workbooks';
 import WorkbookDetail from './pages/workbook/workbook';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/authContext';
 import { Toaster } from "react-hot-toast"
-import ScrollToTop from './components/scrollToTop';
-import ProtectedRoute from './components/protectedRoute';
-import PublicRoute from './components/publicRoute';
+import ScrollToTop from './components/ui/scrollToTop';
+import PublicRoute from './components/ui/publicRoute';
+import ProtectedRoute from './components/ui/protectedRoute';
 
 export default function App() {
     return (

@@ -8,7 +8,7 @@ import {
     ModalDescription,
     ModalBody,
     ModalFooter,
-} from '@/components/ui/Modal';
+} from '@/components/ui/modal';
 import { handleEditWorksheet } from '@/api/worksheet';
 import { type Worksheet } from '@/types/worksheets';
 

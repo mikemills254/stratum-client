@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Loader2, Save, Type } from 'lucide-react';
+import React, { useState } from 'react';
+import { Loader2, Plus, Type } from 'lucide-react';
 import {
     Modal,
     ModalContent,
@@ -8,31 +8,23 @@ import {
     ModalDescription,
     ModalBody,
     ModalFooter,
-} from '@/components/ui/Modal';
-import { handleEditQuestion } from '@/api/question';
-import { type Question } from '@/types/worksheets';
+} from '../ui/modal';
+import { handleCreateQuestion } from '@/api/question';
 
-interface EditQuestionModalProps {
+interface CreateQuestionModalProps {
     isOpen: boolean;
     onClose: () => void;
-    question: Question | null;
-    onQuestionUpdated: () => void;
+    worksheetId: string;
+    onQuestionCreated: () => void;
 }
 
-const EditQuestionModal: React.FC<EditQuestionModalProps> = ({ isOpen, onClose, question, onQuestionUpdated }) => {
+const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({ isOpen, onClose, worksheetId, onQuestionCreated }) => {
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (question) {
-            setText(question.text);
-        }
-    }, [question]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!question) return;
         if (!text.trim()) {
             setError('Question text is required');
             return;
@@ -42,15 +34,17 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({ isOpen, onClose, 
         setError(null);
 
         try {
-            const result = await handleEditQuestion(question.id, {
+            const result = await handleCreateQuestion({
                 text,
+                worksheetId
             });
 
             if (result.success) {
-                onQuestionUpdated();
+                onQuestionCreated();
                 onClose();
+                setText('');
             } else {
-                setError(result.message || 'Failed to update question');
+                setError(result.message || 'Failed to create question');
             }
         } catch (err) {
             setError('An unexpected error occurred');
@@ -65,10 +59,10 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({ isOpen, onClose, 
                 <form onSubmit={handleSubmit}>
                     <ModalHeader className="p-6 border-b border-white/5 space-y-1">
                         <ModalTitle className="text-[20px] font-bold text-text font-syne uppercase tracking-wider text-left">
-                            Edit Question
+                            Add Question
                         </ModalTitle>
                         <ModalDescription className="text-[12px] text-text-dim text-left">
-                            Update the text for this question
+                            Add a new question to this worksheet
                         </ModalDescription>
                     </ModalHeader>
 
@@ -112,8 +106,8 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({ isOpen, onClose, 
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
                                 <>
-                                    <Save className="h-4 w-4" />
-                                    <span>Save Changes</span>
+                                    <Plus className="h-4 w-4" />
+                                    <span>Add Question</span>
                                 </>
                             )}
                         </button>
@@ -124,4 +118,4 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({ isOpen, onClose, 
     );
 };
 
-export default EditQuestionModal;
+export default CreateQuestionModal;

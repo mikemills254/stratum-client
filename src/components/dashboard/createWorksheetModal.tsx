@@ -8,8 +8,8 @@ import {
     ModalDescription,
     ModalBody,
     ModalFooter,
-} from '@/components/ui/Modal';
-import { handleCreateWorksheet } from '@/api/worksheet';
+} from '../ui/modal';
+import { handleCreateWorksheet } from '../../api/worksheet';
 
 interface CreateWorksheetModalProps {
     isOpen: boolean;

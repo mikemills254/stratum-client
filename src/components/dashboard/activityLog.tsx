@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, Send, CheckCircle2, MessageSquare, Flame, RefreshCw, User } from 'lucide-react';
-import { api } from '@/utilities/config';
+import { api } from '../../utilities/config';
 import { formatDistanceToNow } from 'date-fns';
 
 interface AuditLog {

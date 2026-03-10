@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, CheckSquare, BarChart3, Clock, Plus, Users, UserPlus, Check } from 'lucide-react';
-import { api } from '@/utilities/config';
-import InviteTeacherModal from '../../components/dashboard/InviteTeacherModal';
-import ActivityLog from '../../components/dashboard/ActivityLog';
+import InviteTeacherModal from '../../components/dashboard/inviteTeacherModal';
+import ActivityLog from '../../components/dashboard/activityLog';
+import { api } from '../../utilities/config';
 
 interface GradeApproval {
     id: string;

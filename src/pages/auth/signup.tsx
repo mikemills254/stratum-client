@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import supabase from '../../utilities/supabase';
 import { useNavigate, Link } from 'react-router-dom';
 import { Crown, Edit3, BookOpen } from 'lucide-react';
-import { AuthLayout } from '../../components/authLayout';
+import { AuthLayout } from '../../components/ui/authLayout';
 import { useFormik } from "formik";
 import { Role } from '../../types/types';
 

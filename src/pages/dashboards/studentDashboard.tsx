@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Clock, Award, CheckCircle2, FileText, Send, ChevronRight, MessageSquare } from 'lucide-react';
-import Editor from '../../components/editor';
-import ActivityLog from '../../components/dashboard/ActivityLog';
-import { api } from '@/utilities/config';
-import { handleGetOrCreateAnswer, handleSubmitAnswer, handleUpdateAnswerText, type IAnswer } from '@/api/answer';
-import type { Worksheet } from '@/types/worksheets';
+import Editor from '../../components/ui/editor';
+import ActivityLog from '../../components/dashboard/activityLog';
+import { handleGetOrCreateAnswer, handleSubmitAnswer, handleUpdateAnswerText, type IAnswer } from '../../api/answer';
 import toast from 'react-hot-toast';
+import { api } from '../../utilities/config';
+import type { Worksheet } from '../../types/worksheets';
 
 
 interface StudentDashboardProps {

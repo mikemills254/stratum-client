@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import * as Y from 'yjs';
-import supabase from '../utilities/supabase';
+import supabase from '../../utilities/supabase';
 
 interface AwareUser {
     id: string;

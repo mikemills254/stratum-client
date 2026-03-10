@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MoreVertical, UserPlus } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import Wrapper from '../../components/wrapper';
+import Wrapper from '../../components/ui/wrapper';
 import StudentDashboard from '../dashboards/studentDashboard';
 import { handleGetWorkBook } from '@/api/workbook';
 import type { Workbook } from '@/types/workbooks';
 import DirectorDashboard from '../dashboards/directorDashboard';
 import TeacherDashboard from '../dashboards/teacherDashboard';
-import InviteStudentModal from '@/components/dashboard/InviteStudentModal';
+import InviteStudentModal from '@/components/dashboard/inviteStudentModal';
 
 const WorkbookDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();

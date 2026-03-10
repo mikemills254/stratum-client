@@ -1,10 +1,10 @@
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle } from "@/components/ui/Modal"
 import { Plus, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { handleCreateWorkBook } from "@/api/workbook"
 import { toast } from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import { useFormik } from "formik"
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle } from "@/components/ui/modal"
 
 export const CreateWorkBook: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);

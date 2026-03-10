@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import supabase from '../../utilities/supabase';
 import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { AuthLayout } from '../../components/authLayout'
+import { AuthLayout } from '../../components/ui/authLayout'
 
 export const LoginPage: React.FC = () => {
     const navigate = useNavigate();
