@@ -1,13 +1,23 @@
-import { Search, Bell, ChevronDown, User } from 'lucide-react';
+import { Search, Bell, ChevronDown, User, Menu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { useSidebarStore } from '../store/sidebarStore';
 
 export default function TopBar() {
     const { user } = useAuthStore();
+    const { toggleSidebar } = useSidebarStore();
 
     return (
         <div className="flex h-[68px] items-center justify-between border-b border-white/5 px-8 bg-bg/80 backdrop-blur-2xl sticky top-0 z-[100] py-2">
-            <div className="flex-1 max-w-md">
-                <div className="relative group">
+            <div className="flex items-center gap-6 flex-1 max-w-xl">
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2 -ml-2 text-text-dim hover:text-amber hover:bg-white/5 rounded-lg transition-all"
+                    title="Toggle Sidebar"
+                >
+                    <Menu className="h-5 w-5" />
+                </button>
+
+                <div className="flex-1 max-w-md relative group">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-dim group-focus-within:text-amber transition-colors" />
                     <input
                         type="text"
@@ -27,8 +37,8 @@ export default function TopBar() {
 
                 <button className="flex items-center gap-3 p-1 pl-1.5 pr-2.5 hover:bg-surface-2 rounded-xl transition-all group border border-transparent hover:border-white/5">
                     <div className="h-9 w-9 rounded-lg bg-surface-3 flex items-center justify-center border border-border overflow-hidden shadow-sm group-hover:border-amber/30 transition-colors">
-                        {user?.firstName ? (
-                            <span className="text-[14px] font-bold text-amber">{user.firstName[0]}</span>
+                        {user?.username ? (
+                            <span className="text-[14px] font-bold text-amber">{user.username.split(" ")[0][0].toUpperCase()}</span>
                         ) : user?.email ? (
                             <span className="text-[14px] font-bold text-amber">{user.email[0].toUpperCase()}</span>
                         ) : (
@@ -37,7 +47,7 @@ export default function TopBar() {
                     </div>
                     <div className="text-left">
                         <p className="text-[13px] font-semibold text-text leading-none mb-1">
-                            {user?.firstName ? `${user.firstName} ${user.lastName || ''}` : user?.email?.split('@')[0] || 'User'}
+                            {user?.username ? `${user.username}` : user?.email?.split('@')[0] || 'User'}
                         </p>
                         <p className="text-[11px] text-text-dim leading-none truncate max-w-[120px] mb-1.5">
                             {user?.email || 'no-email@stratum.com'}

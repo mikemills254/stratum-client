@@ -1,37 +1,39 @@
 import React, { useState } from 'react';
 import supabase from '../../utilities/supabase';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthLayout } from '../../components/AuthLayout';
+import { useFormik } from 'formik';
+import { AuthLayout } from '../../components/authLayout'
 
 export const LoginPage: React.FC = () => {
     const navigate = useNavigate();
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleEmailLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        try {
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-        } catch (err: any) {
-            setError(err.message || 'Failed to sign in');
-        } finally {
-            setLoading(false);
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
+            try {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: values.email,
+                    password: values.password,
+                });
+                if (error) throw error;
+            } catch (err: any) {
+                setError(err.message || 'Failed to sign in');
+            } finally {
+                setSubmitting(false);
+            }
         }
-    };
+    });
 
     const handleGoogleLogin = async () => {
         try {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: {
-                    redirectTo: window.location.origin
-                }
+                options: { redirectTo: window.location.origin }
             });
             if (error) throw error;
         } catch (err: any) {
@@ -58,7 +60,7 @@ export const LoginPage: React.FC = () => {
                 or continue with email
             </div>
 
-            <form className="space-y-5" onSubmit={handleEmailLogin}>
+            <form className="space-y-5" onSubmit={formik.handleSubmit} autoComplete='off' autoCapitalize='off'>
                 {error && (
                     <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg">
                         {error}
@@ -67,11 +69,12 @@ export const LoginPage: React.FC = () => {
                 <div className="space-y-2">
                     <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">Email address</label>
                     <input
+                        name="email"
                         className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                         type="email"
                         placeholder="you@school.edu"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
                         required
                     />
                 </div>
@@ -81,20 +84,22 @@ export const LoginPage: React.FC = () => {
                         <Link to="/forgot-password" className="text-amber text-[11px] font-medium hover:underline">Forgot password?</Link>
                     </div>
                     <input
+                        name="password"
                         className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                         type="password"
                         placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
                         required
                     />
                 </div>
 
                 <button
-                    disabled={loading}
+                    type="submit"
+                    disabled={formik.isSubmitting}
                     className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer mt-2 disabled:opacity-50"
                 >
-                    {loading ? 'Signing in...' : 'Sign In to Stratum →'}
+                    {formik.isSubmitting ? 'Signing in...' : 'Sign In to Stratum →'}
                 </button>
             </form>
 

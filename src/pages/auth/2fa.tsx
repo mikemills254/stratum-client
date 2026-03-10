@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthLayout } from '../../components/AuthLayout';
+import { AuthLayout } from '../../components/authLayout';
 import { useAuthStore } from '../../store/authStore';
+import { handleVerifyTwoFactor, handleRequestTwoFactor } from '../../api/auth';
 
 export const TwoFactorPage: React.FC = () => {
     const navigate = useNavigate();
@@ -27,37 +28,52 @@ export const TwoFactorPage: React.FC = () => {
     };
 
     const [loading, setLoading] = useState(false);
+    const [resending, setResending] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [resendMessage, setResendMessage] = useState<string | null>(null);
 
     const handleVerify = async () => {
         setLoading(true);
         setError(null);
         try {
-            // Wait for user or implementation details on how OTP is handled in this specific setup
-            // For now, assuming email OTP
-            const otpString = otp.join('');
-            // Note: In a real scenario, we'd need the email here. 
-            // If it's a signup flow, Supabase might handle it via the session or we might need to pass email.
-            // This is a placeholder for the actual Supabase verification call
-            // const { error } = await supabase.auth.verifyOtp({ ... });
-
-            console.log('Verifying OTP:', otpString);
-            // Simulate success for now
+            const code = otp.join('');
+            const result = await handleVerifyTwoFactor(code);
+            if (!result.success) throw new Error(result.message);
             useAuthStore.getState().set2FaVerified(true);
             navigate('/workbook');
         } catch (err: any) {
-            setError(err.message || 'Verification failed');
+            setError(err.message || 'Verification failed. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
+    const handleResend = async () => {
+        setResending(true);
+        setResendMessage(null);
+        setError(null);
+        try {
+            const role = useAuthStore.getState().user?.role;
+            if (!role) throw new Error('Could not determine your role. Please sign in again.');
+            const result = await handleRequestTwoFactor(role);
+            if (!result.success) throw new Error(result.message);
+            setResendMessage('A new code has been sent to your email.');
+            setOtp(['', '', '', '', '', '']);
+            inputRefs.current[0]?.focus();
+        } catch (err: any) {
+            setError(err.message || 'Failed to resend code. Please try again.');
+        } finally {
+            setResending(false);
+        }
+    };
+
     const isComplete = otp.every(digit => digit !== '');
+
 
     return (
         <AuthLayout
             type="2fa"
-            onBack={() => navigate('/login')}
+            onBack={() => navigate(-1)}
             title="Verify identity"
             sub={<>We've sent a 6-digit verification code to your email. Enter it below to continue.</>}
         >
@@ -65,6 +81,11 @@ export const TwoFactorPage: React.FC = () => {
                 {error && (
                     <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg">
                         {error}
+                    </div>
+                )}
+                {resendMessage && (
+                    <div className="p-3 text-xs bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg">
+                        {resendMessage}
                     </div>
                 )}
                 <div className="flex justify-between gap-2.5">
@@ -91,8 +112,13 @@ export const TwoFactorPage: React.FC = () => {
                         {loading ? 'Verifying...' : 'Verify & Continue →'}
                     </button>
 
-                    <button type="button" className="w-full text-[13px] text-text-dim hover:text-amber transition-colors">
-                        Didn't receive a code? <span className="text-amber font-medium">Resend</span>
+                    <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={resending}
+                        className="w-full text-[13px] text-text-dim hover:text-amber transition-colors disabled:opacity-50"
+                    >
+                        {resending ? 'Sending...' : <>Didn't receive a code? <span className="text-amber font-medium">Resend</span></>}
                     </button>
                 </div>
             </form>

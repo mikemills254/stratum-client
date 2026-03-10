@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import type { Session, User } from '@supabase/supabase-js';
 import supabase from '../utilities/supabase';
 import { useAuthStore } from '../store/authStore';
+import { handleRequestTwoFactor } from '../api/auth';
 
 interface AuthContextType {
     session: Session | null;
@@ -34,8 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setStoreUser({
                     id: supabaseUser.id,
                     email: supabaseUser.email ?? null,
-                    firstName: supabaseUser.user_metadata?.first_name ?? null,
-                    lastName: supabaseUser.user_metadata?.last_name ?? null,
+                    username: `${supabaseUser.user_metadata.first_name} ${supabaseUser.user_metadata.last_name}`,
                     role: supabaseUser.user_metadata?.role ?? null,
                     isAuthenticated: true,
                     is2FaVerified: is2FaVerified,
@@ -61,6 +61,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             if (event === 'SIGNED_IN') {
                 if (location.pathname === '/login' || location.pathname === '/signup') {
+                    // role was saved into user_metadata at signup — read it back now
+                    const role = session?.user?.user_metadata?.role ?? null;
+                    if (role) {
+                        // fire the email; we don't block navigation on failure
+                        handleRequestTwoFactor(role).then((result) => {
+                            if (!result.success) {
+                                console.warn('2FA email failed to send:', result.message);
+                            }
+                        });
+                    }
                     navigate('/auth/2fa');
                 }
             }
@@ -73,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => {
             subscription.unsubscribe();
         };
-    }, [location.pathname, navigate, setStoreUser, clearStoreUser]); // Added location.pathname to dependencies
+    }, [location.pathname, navigate, setStoreUser, clearStoreUser]);
 
     const signOut = async () => {
         await supabase.auth.signOut();

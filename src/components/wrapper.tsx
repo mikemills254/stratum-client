@@ -9,7 +9,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
 
             <SideBar />
 
-            <div className="flex-1 overflow-y-auto flex flex-col relative z-[1]">
+            <div className="flex-1 h-screen overflow-y-auto flex flex-col relative z-[1] transition-all duration-300 ease-in-out">
                 {/* Background Decor */}
                 <div className="fixed top-[-10vh] right-[-10vw] w-[600px] h-[600px] bg-[radial-gradient(ellipse,rgba(232,160,32,0.05)_0%,transparent_70%)] pointer-events-none -z-10" />
                 <div className="fixed bottom-[-10vh] left-[20vw] w-[500px] h-[500px] bg-[radial-gradient(ellipse,rgba(44,136,255,0.02)_0%,transparent_70%)] pointer-events-none -z-10" />

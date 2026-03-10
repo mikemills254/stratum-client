@@ -1,76 +1,62 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Plus,
     MoreHorizontal,
     ArrowUpRight,
-    Clock,
     Flame,
-    Award,
-    TrendingUp,
-    Library,
     ArrowRightLeft,
     CheckCircle2
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Wrapper from '../../components/wrapper';
 import { useAuthStore } from '../../store/authStore';
+import { handleGetWorkBooks } from '@/api/workbook';
+import toast from 'react-hot-toast';
+import type { Workbook } from '@/types/workbooks';
+import CreateWorkBook from './createworkbook';
 
 export const WorkbookPage: React.FC = () => {
     const { user } = useAuthStore();
+    const isDirector = user?.role?.toLowerCase() === 'director';
+    const [workbooks, setWorkbooks] = useState<Workbook[]>([])
 
-    const stats = [
-        { label: 'Total Books', value: '12', icon: Library, color: 'bg-blue/10 text-blue', border: 'border-blue/20' },
-        { label: 'Active Streak', value: '5 Days', icon: Flame, color: 'bg-amber/10 text-amber', border: 'border-amber/20' },
-        { label: 'Points Earned', value: '1,240', icon: Award, color: 'bg-green/10 text-green', border: 'border-green/20' },
-        { label: 'Study Hours', value: '24.5h', icon: Clock, color: 'bg-text-mid/10 text-text-mid', border: 'border-white/5' },
-    ];
+    const fetchData = async () => {
+        try {
+            const results = await handleGetWorkBooks()
 
-    const workbooks = [
-        { title: 'Modern Web Architecture', progress: 65, category: 'Engineering', lastActive: '2h ago', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=200&auto=format&fit=crop', color: 'text-blue bg-blue/5 border-blue/10' },
-        { title: 'User Experience Design', progress: 32, category: 'Design', lastActive: '5h ago', image: 'https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?q=80&w=200&auto=format&fit=crop', color: 'text-green bg-green/5 border-green/10' },
-        { title: 'Financial Modeling 101', progress: 88, category: 'Finance', lastActive: '1d ago', image: 'https://images.unsplash.com/photo-1611974714658-75d4f1ad646d?q=80&w=200&auto=format&fit=crop', color: 'text-amber bg-amber/5 border-amber/10' },
-        { title: 'Global Macro Trends', progress: 12, category: 'Business', lastActive: '3d ago', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=200&auto=format&fit=crop', color: 'text-text-mid bg-white/5 border-white/5' },
-    ];
+            if (!results.success) {
+                toast.error(results.message)
+                return
+            }
+
+            if (results.data) {
+                setWorkbooks(results.data)
+            }
+        } catch (error) {
+            console.log("errior", error)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
 
     return (
         <Wrapper>
             <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <label className="font-mono text-[11px] text-amber tracking-[0.2em] uppercase mb-4 block opacity-70">// User Dashboard</label>
                         <h1 className="font-instrument text-[48px] leading-[1.1] text-text tracking-tight mb-3">
-                            Welcome back, <span className="italic text-gradient">{user?.firstName || 'Learner'}</span>
+                            Welcome back, <span className="italic text-gradient">{user?.username?.split(' ')[0] || 'Learner'}</span>
                         </h1>
                         <p className="text-[16px] text-text-mid font-light max-w-[500px]">
                             You're making great progress in your current workbooks. Here's a quick look at your activity.
                         </p>
                     </div>
-                    <button className="flex items-center gap-2.5 px-6 py-3.5 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-xl font-bold shadow-[0_8px_32px_rgba(232,160,32,0.3)] hover:shadow-[0_16px_48px_rgba(232,160,32,0.4)] hover:-translate-y-px active:scale-[0.98] transition-all">
-                        <Plus className="h-5 w-5" />
-                        <span>Create Workbook</span>
-                    </button>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {stats.map((stat) => (
-                        <div key={stat.label} className={`p-5 rounded-2xl bg-surface border ${stat.border} hover:border-white/10 transition-all group relative overflow-hidden`}>
-                            <div className="flex items-center justify-between mb-5 relative z-10">
-                                <div className={`p-2.5 rounded-xl ${stat.color} border border-white/5`}>
-                                    <stat.icon className="h-5 w-5" />
-                                </div>
-                                <div className="p-1 px-2.5 rounded-full bg-white/5 text-[10px] font-mono text-emerald-400 flex items-center gap-1.5 border border-white/5">
-                                    <TrendingUp className="h-3 w-3" />
-                                    <span className="tracking-widest">+12.5%</span>
-                                </div>
-                            </div>
-                            <p className="text-[12px] font-medium text-text-mid mb-1.5 relative z-10">{stat.label}</p>
-                            <p className="text-2xl font-bold text-text tracking-tight group-hover:text-amber transition-colors relative z-10">{stat.value}</p>
-
-                            {/* Subtle background glow */}
-                            <div className={`absolute -right-4 -bottom-4 w-20 h-20 rounded-full blur-[40px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${stat.color.split(' ')[0]}`} />
-                        </div>
-                    ))}
+                    {isDirector && (
+                        <CreateWorkBook />
+                    )}
                 </div>
 
                 {/* Main Content Sections */}
@@ -85,30 +71,23 @@ export const WorkbookPage: React.FC = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-5">
                             {workbooks.map((book) => (
-                                <div key={book.title} className="group p-5 bg-surface border border-border rounded-2xl flex flex-col hover:border-white/10 hover:shadow-[0_24px_64px_rgba(0,0,0,0.4)] transition-all duration-500 relative overflow-hidden">
+                                <Link to={`/workbook/${book.id}`} key={book.id} className="group p-5 bg-surface border border-border rounded-2xl flex flex-col hover:border-white/10 hover:shadow-[0_24px_64px_rgba(0,0,0,0.4)] transition-all duration-500 relative overflow-hidden">
                                     <div className="flex gap-5 mb-5">
-                                        <div className="h-24 w-18 rounded-lg bg-surface-2 border border-border overflow-hidden flex-shrink-0 shadow-lg relative">
-                                            <img src={book.image} alt={book.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-bg/40 to-transparent" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
+                                        <div className="flex-1 min-w-0 space-y-2">
                                             <div className="flex items-start justify-between mb-2">
-                                                <span className={`text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${book.color}`}>{book.category}</span>
+                                                <span className={`text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${(book as any).color || 'text-blue bg-blue/5 border-border'}`}>{(book as any).category || book.tag}</span>
                                                 <button className="text-text-dim hover:text-text transition-colors"><MoreHorizontal className="h-4 w-4" /></button>
                                             </div>
-                                            <h3 className="text-[16px] font-bold text-text leading-snug group-hover:text-amber transition-colors line-clamp-2 pr-4">{book.title}</h3>
-                                            <div className="flex items-center gap-1.5 mt-3 text-[11px] text-text-dim font-medium">
-                                                <Clock className="h-3 w-3" />
-                                                <span>Modified {book.lastActive}</span>
-                                            </div>
+                                            <h3 className="text-[16px] font-bold text-text leading-snug group-hover:text-amber transition-colors line-clamp-2 pr-4">{book.name || (book as any).name}</h3>
+                                            <p className="text-[13px] text-text-dim">{book.description}</p>
                                         </div>
                                     </div>
 
                                     <div className="mt-auto pt-5 border-t border-white/5">
                                         <div className="flex items-center justify-between mb-2.5">
-                                            <span className="text-[11px] font-mono font-bold text-text-mid tracking-tight leading-none group-hover:text-text transition-colors">{book.progress}% COMPLETE</span>
+                                            <span className="text-[11px] font-mono font-bold text-text-mid tracking-tight leading-none group-hover:text-text transition-colors">{(book as any).progress || 0}% COMPLETE</span>
                                             <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-surface-2 border border-border group-hover:bg-amber group-hover:text-bg group-hover:border-amber transition-all duration-500">
                                                 <ArrowUpRight className="h-3.5 w-3.5" />
                                             </div>
@@ -116,11 +95,11 @@ export const WorkbookPage: React.FC = () => {
                                         <div className="h-1.5 w-full bg-surface-3 rounded-full overflow-hidden border border-white/5">
                                             <div
                                                 className="h-full bg-gradient-to-r from-amber to-[#ff6b35] transition-all duration-1000 ease-out rounded-full shadow-[0_0_8px_rgba(232,160,32,0.3)]"
-                                                style={{ width: `${book.progress}%` }}
+                                                style={{ width: `${(book as any).progress || 0}%` }}
                                             ></div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>

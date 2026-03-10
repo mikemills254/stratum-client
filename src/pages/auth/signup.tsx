@@ -2,50 +2,51 @@ import React, { useState } from 'react';
 import supabase from '../../utilities/supabase';
 import { useNavigate, Link } from 'react-router-dom';
 import { Crown, Edit3, BookOpen } from 'lucide-react';
-import { AuthLayout } from '../../components/AuthLayout';
+import { AuthLayout } from '../../components/authLayout';
+import { useFormik } from "formik";
+import { Role } from '../../types/types';
 
 export const SignupPage: React.FC = () => {
     const navigate = useNavigate();
-    const [selectedRole, setSelectedRole] = useState<'director' | 'teacher' | 'student'>('teacher');
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleSignup = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        try {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        first_name: firstName,
-                        last_name: lastName,
-                        role: selectedRole
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            role: Role.TEACHER
+        },
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
+            try {
+                const { error } = await supabase.auth.signUp({
+                    email: values.email,
+                    password: values.password,
+                    options: {
+                        data: {
+                            first_name: values.firstName,
+                            last_name: values.lastName,
+                            role: values.role
+                        }
                     }
-                }
-            });
-            if (error) throw error;
-        } catch (err: any) {
-            setError(err.message || 'Failed to sign up');
-        } finally {
-            setLoading(false);
+                });
+                navigate("/auth/2fa")
+                if (error) throw error;
+            } catch (err: any) {
+                setError(err.message || 'Failed to sign up');
+            } finally {
+                setSubmitting(false);
+            }
         }
-    };
+    });
 
     const handleGoogleSignup = async () => {
         try {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: {
-                    redirectTo: window.location.origin
-                }
+                options: { redirectTo: window.location.origin }
             });
             if (error) throw error;
         } catch (err: any) {
@@ -72,7 +73,7 @@ export const SignupPage: React.FC = () => {
                 or sign up with email
             </div>
 
-            <form className="space-y-5" onSubmit={handleSignup}>
+            <form className="space-y-5" onSubmit={formik.handleSubmit} autoComplete='off' autoCapitalize='off'>
                 {error && (
                     <div className="p-3 text-xs bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg">
                         {error}
@@ -82,20 +83,22 @@ export const SignupPage: React.FC = () => {
                     <div className="space-y-2">
                         <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">First Name</label>
                         <input
+                            name="firstName"
                             className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                             placeholder="Mike"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            value={formik.values.firstName}
+                            onChange={formik.handleChange}
                             required
                         />
                     </div>
                     <div className="space-y-2">
                         <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">Last Name</label>
                         <input
+                            name="lastName"
                             className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                             placeholder="Kimani"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            value={formik.values.lastName}
+                            onChange={formik.handleChange}
                             required
                         />
                     </div>
@@ -104,22 +107,24 @@ export const SignupPage: React.FC = () => {
                 <div className="space-y-2">
                     <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">Email address</label>
                     <input
+                        name="email"
                         className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                         type="email"
                         placeholder="you@school.edu"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
                         required
                     />
                 </div>
                 <div className="space-y-2">
                     <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">Password</label>
                     <input
+                        name="password"
                         className="w-full bg-surface border border-border-light rounded-xl px-4 py-3.5 text-text outline-none focus:border-amber focus:ring-4 focus:ring-amber/5 transition-all"
                         type="password"
                         placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
                         required
                     />
                 </div>
@@ -128,17 +133,17 @@ export const SignupPage: React.FC = () => {
                     <label className="text-[12px] font-semibold text-text-mid uppercase tracking-widest">Your Role</label>
                     <div className="grid grid-cols-3 gap-2">
                         {[
-                            { id: 'director', icon: <Crown size={20} />, name: 'Director', hint: 'Manage structure' },
-                            { id: 'teacher', icon: <Edit3 size={20} />, name: 'Teacher', hint: 'Grade & annotate' },
-                            { id: 'student', icon: <BookOpen size={20} />, name: 'Student', hint: 'Answer & learn' },
+                            { id: Role.DIRECTOR, icon: <Crown size={20} />, name: 'Director', hint: 'Manage structure' },
+                            { id: Role.TEACHER, icon: <Edit3 size={20} />, name: 'Teacher', hint: 'Grade & annotate' },
+                            { id: Role.STUDENT, icon: <BookOpen size={20} />, name: 'Student', hint: 'Answer & learn' },
                         ].map((role) => (
                             <div
                                 key={role.id}
-                                onClick={() => setSelectedRole(role.id as any)}
-                                className={`relative bg-surface border-[1.5px] rounded-xl p-[14px_8px] text-center cursor-pointer transition-all hover:border-amber/30 ${selectedRole === role.id ? 'border-amber bg-amber-dim' : 'border-border-light'}`}
+                                onClick={() => formik.setFieldValue('role', role.id)}
+                                className={`relative bg-surface border-[1.5px] rounded-xl p-[14px_8px] text-center cursor-pointer transition-all hover:border-amber/30 ${formik.values.role === role.id ? 'border-amber bg-amber-dim' : 'border-border-light'}`}
                             >
-                                {selectedRole === role.id && <div className="absolute top-1.5 right-2 text-amber text-[10px]">✓</div>}
-                                <div className={`flex justify-center mb-1.5 ${selectedRole === role.id ? 'text-amber' : 'text-text-dim'}`}>{role.icon}</div>
+                                {formik.values.role === role.id && <div className="absolute top-1.5 right-2 text-amber text-[10px]">✓</div>}
+                                <div className={`flex justify-center mb-1.5 ${formik.values.role === role.id ? 'text-amber' : 'text-text-dim'}`}>{role.icon}</div>
                                 <div className="text-[12px] font-bold text-text">{role.name}</div>
                                 <div className="text-[10px] text-text-dim mt-0.5">{role.hint}</div>
                             </div>
@@ -147,10 +152,11 @@ export const SignupPage: React.FC = () => {
                 </div>
 
                 <button
-                    disabled={loading}
+                    type="submit"
+                    disabled={formik.isSubmitting}
                     className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer mt-2 disabled:opacity-50"
                 >
-                    {loading ? 'Creating account...' : 'Create My Account →'}
+                    {formik.isSubmitting ? 'Creating account...' : 'Create My Account →'}
                 </button>
             </form>
 

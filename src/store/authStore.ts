@@ -4,8 +4,7 @@ import { persist } from 'zustand/middleware';
 interface UserState {
     id: string | null;
     email: string | null;
-    firstName: string | null;
-    lastName: string | null;
+    username: string | null;
     role: string | null;
     isAuthenticated: boolean;
     is2FaVerified: boolean;

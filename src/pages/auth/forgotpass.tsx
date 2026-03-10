@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthLayout } from '../../components/AuthLayout';
+import { AuthLayout } from '../../components/authLayout';
 
 export const ForgotPasswordPage: React.FC = () => {
     const navigate = useNavigate();
