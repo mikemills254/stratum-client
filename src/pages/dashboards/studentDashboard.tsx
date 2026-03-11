@@ -379,7 +379,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                                         <div className="flex-1 min-w-0 space-y-1">
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[12px] font-bold text-text">{annot.teacher.username}</span>
-                                                <span className="text-[9px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span>
+                                                {/* <span className="text-[9px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span> */}
                                             </div>
                                             <p className="text-[13px] text-text-mid leading-relaxed break-words">{annot.comment}</p>
                                         </div>
