@@ -7,11 +7,11 @@ export default function TopBar() {
     const { toggleSidebar } = useSidebarStore();
 
     return (
-        <div className="flex h-[68px] items-center justify-between border-b border-white/5 px-8 bg-bg/80 backdrop-blur-2xl sticky top-0 z-[100] py-2">
+        <div className="flex h-[68px] items-center justify-between border-b border-black/5 px-8 bg-surface/80 backdrop-blur-2xl sticky top-0 z-[100] py-2">
             <div className="flex items-center gap-6 flex-1 max-w-xl">
                 <button
                     onClick={toggleSidebar}
-                    className="p-2 -ml-2 text-text-dim hover:text-amber hover:bg-white/5 rounded-lg transition-all"
+                    className="p-2 -ml-2 text-text-dim hover:text-amber hover:bg-black/5 rounded-lg transition-all"
                     title="Toggle Sidebar"
                 >
                     <Menu className="h-5 w-5" />
@@ -35,7 +35,7 @@ export default function TopBar() {
 
                 <div className="h-7 w-[1px] bg-border mx-1"></div>
 
-                <button className="flex items-center gap-3 p-1 pl-1.5 pr-2.5 hover:bg-surface-2 rounded-xl transition-all group border border-transparent hover:border-white/5">
+                <button className="flex items-center gap-3 p-1 pl-1.5 pr-2.5 hover:bg-surface-2 rounded-xl transition-all group border border-transparent hover:border-black/5">
                     <div className="h-9 w-9 rounded-lg bg-surface-3 flex items-center justify-center border border-border overflow-hidden shadow-sm group-hover:border-amber/30 transition-colors">
                         {user?.username ? (
                             <span className="text-[14px] font-bold text-amber">{user.username.split(" ")[0][0].toUpperCase()}</span>

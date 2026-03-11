@@ -169,12 +169,12 @@ const Editor = forwardRef<EditorRef, EditorProps>(({
     };
 
     return (
-        <div className="relative w-full border border-white/5 rounded-xl bg-surface overflow-hidden transition-all duration-300 hover:border-white/10 flex flex-col min-h-[140px]">
+        <div className="relative w-full border border-black/5 rounded-xl bg-surface overflow-hidden transition-all duration-300 hover:border-black/10 flex flex-col min-h-[140px]">
             {/* Sync & Presence Header */}
             <div className="absolute top-2 left-2 right-2 z-10 flex items-center justify-between pointer-events-none">
                 {/* Status & Mode Badges */}
                 <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/5 whitespace-nowrap">
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md border border-black/5 whitespace-nowrap">
                         <div className={`h-1.5 w-1.5 rounded-full transition-colors duration-300 ${status === 'connected'
                             ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'
                             : status === 'connecting'
@@ -187,7 +187,7 @@ const Editor = forwardRef<EditorRef, EditorProps>(({
                     </div>
 
                     {readOnly && (
-                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 backdrop-blur-md border border-white/10 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/5 backdrop-blur-md border border-black/10 whitespace-nowrap">
                             <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-amber/80">
                                 View Only
                             </span>
@@ -200,10 +200,10 @@ const Editor = forwardRef<EditorRef, EditorProps>(({
                     {awarenessUsers.map((user, idx) => (
                         <div
                             key={`${user.id}-${idx}`}
-                            className={`relative h-6 w-6 rounded-full border-2 border-surface flex items-center justify-center text-[9px] font-bold text-white transition-transform hover:scale-110 cursor-help group ${getRoleColor(user.role)}`}
+                            className={`relative h-6 w-6 rounded-full border-2 border-surface flex items-center justify-center text-[9px] font-bold text-text transition-transform hover:scale-110 cursor-help group ${getRoleColor(user.role)}`}
                         >
                             {getInitials(user.name)}
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black/90 text-[9px] text-white opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-white/10 backdrop-blur-md shadow-xl z-50">
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black/90 text-[9px] text-text opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-black/10 backdrop-blur-md shadow-xl z-50">
                                 <div className="flex flex-col items-center">
                                     <span className="font-bold">{user.name}</span>
                                     <span className="text-[8px] uppercase tracking-wider text-text-dim opacity-70">{user.role}</span>

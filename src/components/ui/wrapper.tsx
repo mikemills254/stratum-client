@@ -22,7 +22,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
                     </div>
                 </main>
 
-                <footer className="px-12 py-8 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity">
+                <footer className="px-12 py-8 border-t border-black/5 opacity-40 hover:opacity-100 transition-opacity">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <div className="flex flex-col gap-[2px] w-4">

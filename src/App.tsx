@@ -6,6 +6,7 @@ import TwoFactorPage from './pages/auth/2fa';
 import ForgotPasswordPage from './pages/auth/forgotpass';
 import WorkbookPage from './pages/workbook/workbooks';
 import WorkbookDetail from './pages/workbook/workbook';
+import ExplorePage from './pages/discover/explore';
 import { AuthProvider } from './contexts/authContext';
 import { Toaster } from "react-hot-toast"
 import ScrollToTop from './components/ui/scrollToTop';
@@ -36,6 +37,14 @@ export default function App() {
                     element={
                         <ProtectedRoute>
                             <WorkbookDetail />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/explore"
+                    element={
+                        <ProtectedRoute>
+                            <ExplorePage />
                         </ProtectedRoute>
                     }
                 />

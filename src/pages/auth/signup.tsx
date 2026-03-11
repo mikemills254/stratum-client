@@ -154,7 +154,7 @@ export const SignupPage: React.FC = () => {
                 <button
                     type="submit"
                     disabled={formik.isSubmitting}
-                    className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer mt-2 disabled:opacity-50"
+                    className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-text rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer mt-2 disabled:opacity-50"
                 >
                     {formik.isSubmitting ? 'Creating account...' : 'Create My Account →'}
                 </button>

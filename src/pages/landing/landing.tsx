@@ -103,7 +103,7 @@ export const LandingPage: React.FC = () => {
             <div className="fixed top-[-20vh] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse,rgba(232,160,32,0.08)_0%,transparent_65%)] pointer-events-none z-0" />
 
             {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-[60px] h-[68px] flex items-center bg-bg/80 backdrop-blur-2xl border-b border-white/5">
+            <nav className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-[60px] h-[68px] flex items-center bg-surface/80 backdrop-blur-2xl border-b border-black/5">
                 <div className="flex items-center w-full max-w-[1200px] mx-auto">
                     <Link to="/" className="flex items-center gap-2.5 group">
                         <div className="flex flex-col gap-[3.5px] w-7">
@@ -133,7 +133,7 @@ export const LandingPage: React.FC = () => {
                         </Link>
                         <Link
                             to="/signup"
-                            className="px-[22px] py-2.5 rounded-lg bg-gradient-to-br from-amber to-[#ff6b35] text-white text-[13px] font-semibold shadow-[0_4px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(232,160,32,0.4)] transition-all cursor-pointer"
+                            className="px-[22px] py-2.5 rounded-lg bg-gradient-to-br from-amber to-[#ff6b35] text-text text-[13px] font-semibold shadow-[0_4px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(232,160,32,0.4)] transition-all cursor-pointer"
                         >
                             Start Free →
                         </Link>
@@ -162,7 +162,7 @@ export const LandingPage: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <Link
                             to="/signup"
-                            className="px-8 py-4 rounded-[10px] bg-gradient-to-br from-amber to-[#ff6b35] text-white text-[15px] font-semibold shadow-[0_8px_32px_rgba(232,160,32,0.35)] hover:-translate-y-[2px] hover:shadow-[0_16px_48px_rgba(232,160,32,0.45)] transition-all cursor-pointer"
+                            className="px-8 py-4 rounded-[10px] bg-gradient-to-br from-amber to-[#ff6b35] text-text text-[15px] font-semibold shadow-[0_8px_32px_rgba(232,160,32,0.35)] hover:-translate-y-[2px] hover:shadow-[0_16px_48px_rgba(232,160,32,0.45)] transition-all cursor-pointer"
                         >
                             Get Started Free →
                         </Link>
@@ -196,7 +196,7 @@ export const LandingPage: React.FC = () => {
                     <RoleTag name="Ms. Okonkwo" role="Teacher" color="var(--color-green)" className="bottom-[40px] left-[-24px] delay-1000" />
                     <RoleTag name="Jamie" role="Student" color="var(--color-amber)" className="bottom-[-18px] right-[20px] delay-2000" />
 
-                    <div className="bg-surface border border-border-light rounded-2xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.6)]">
+                    <div className="bg-surface border border-border-light rounded-2xl overflow-hidden shadow-sm">
                         <div className="bg-surface-2 p-[14px_18px] flex items-center gap-2.5 border-b border-border">
                             <div className="flex gap-1.5">
                                 <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
@@ -244,7 +244,7 @@ export const LandingPage: React.FC = () => {
             {/* Strata Divider */}
             <div className="relative h-[60px] overflow-hidden opacity-15">
                 <div className="absolute left-[-10%] right-[-10%] h-[1px] bg-gradient-to-r from-transparent via-amber/50 to-transparent top-5 skew-y-[-0.8deg]" />
-                <div className="absolute left-[-10%] right-[-10%] h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent top-[38px] skew-y-[-1.5deg] opacity-50" />
+                <div className="absolute left-[-10%] right-[-10%] h-[1px] bg-gradient-to-r from-transparent via-black/50 to-transparent top-[38px] skew-y-[-1.5deg] opacity-50" />
             </div>
 
             {/* Features */}
@@ -441,7 +441,7 @@ export const LandingPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row gap-3 justify-center">
                     <Link
                         to="/signup"
-                        className="px-8 py-4 rounded-[10px] bg-gradient-to-br from-amber to-[#ff6b35] text-white text-[15px] font-semibold shadow-[0_8px_32px_rgba(232,160,32,0.35)] hover:-translate-y-px transition-all cursor-pointer"
+                        className="px-8 py-4 rounded-[10px] bg-gradient-to-br from-amber to-[#ff6b35] text-text text-[15px] font-semibold shadow-[0_8px_32px_rgba(232,160,32,0.35)] hover:-translate-y-px transition-all cursor-pointer"
                     >
                         Create Your Workbook →
                     </Link>
@@ -482,7 +482,7 @@ export const LandingPage: React.FC = () => {
 // ── Components
 
 const RoleTag: React.FC<{ name: string; role: string; color: string; className: string }> = ({ name, role, color, className }) => (
-    <div className={`absolute bg-surface border border-border-light rounded-lg p-[8px_12px] text-[11px] font-medium flex items-center gap-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.4)] animate-float-y ${className}`}>
+    <div className={`absolute bg-surface border border-border-light rounded-lg p-[8px_12px] text-[11px] font-medium flex items-center gap-1.5 shadow-sm animate-float-y ${className}`}>
         <div className="w-[7px] h-[7px] rounded-full animate-pulse" style={{ backgroundColor: color, boxShadow: `0 0 0 0 ${color}50` }} />
         <span className="text-text-mid">{name} <span style={{ color }}>{role}</span></span>
     </div>
@@ -513,7 +513,7 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; desc: string
 );
 
 const RoleCard: React.FC<{ role: string; icon: React.ReactNode; color: string; desc: string; perms: { ok: boolean; text: string }[] }> = ({ role, icon, color, desc, perms }) => (
-    <div className={`group bg-surface border border-border rounded-2xl p-[36px_28px] relative overflow-hidden transition-all hover:border-border-light hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]`}>
+    <div className={`group bg-surface border border-border rounded-2xl p-[36px_28px] relative overflow-hidden transition-all hover:border-border-light hover:-translate-y-1 hover:shadow-sm`}>
         <div className={`absolute top-0 left-0 right-0 h-[3px] ${color.replace('border', 'bg')}`} />
         <div className="text-4xl mb-4">{icon}</div>
         <div className={`font-syne text-[20px] font-bold mb-2.5 ${color.replace('border', 'text')}`}>{role}</div>
@@ -531,7 +531,7 @@ const RoleCard: React.FC<{ role: string; icon: React.ReactNode; color: string; d
 
 const PriceCard: React.FC<{ plan: string; price: string; desc: string; featured?: boolean; features: string[] }> = ({ plan, price, desc, featured, features }) => (
     <div className={`bg-surface border border-border rounded-2xl p-[36px_28px] transition-all relative ${featured ? 'bg-gradient-to-br from-surface-2/50 to-surface border-amber/35 shadow-[0_0_40px_rgba(232,160,32,0.1)]' : 'hover:border-border-light hover:-translate-y-1'}`}>
-        {featured && <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 bg-gradient-to-br from-amber to-[#ff6b35] text-white text-[11px] font-bold px-3.5 py-1 rounded-full tracking-wider">MOST POPULAR</div>}
+        {featured && <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 bg-gradient-to-br from-amber to-[#ff6b35] text-text text-[11px] font-bold px-3.5 py-1 rounded-full tracking-wider">MOST POPULAR</div>}
         <div className="font-syne text-[13px] font-bold uppercase tracking-widest text-text-mid mb-5">{plan}</div>
         <div className="font-instrument text-[52px] text-text tracking-tight leading-tight">
             {price}<span className="text-base text-text-mid font-dm">{price.includes('$') ? '/mo' : ''}</span>
@@ -544,7 +544,7 @@ const PriceCard: React.FC<{ plan: string; price: string; desc: string; featured?
         </ul>
         <Link
             to="/signup"
-            className={`block text-center w-full py-3 rounded-lg font-dm text-sm font-semibold transition-all cursor-pointer ${featured ? 'bg-gradient-to-br from-amber to-[#ff6b35] text-white shadow-[0_4px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_8px_32px_rgba(232,160,32,0.4)]' : 'border border-border-light text-text-mid hover:border-amber hover:text-amber'}`}
+            className={`block text-center w-full py-3 rounded-lg font-dm text-sm font-semibold transition-all cursor-pointer ${featured ? 'bg-gradient-to-br from-amber to-[#ff6b35] text-text shadow-[0_4px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_8px_32px_rgba(232,160,32,0.4)]' : 'border border-border-light text-text-mid hover:border-amber hover:text-amber'}`}
         >
             {plan === 'Enterprise' ? 'Contact Sales' : featured ? 'Start Free Trial →' : 'Get Started'}
         </Link>

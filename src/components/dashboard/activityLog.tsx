@@ -61,15 +61,15 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ workbookId, limit = 10, title
 
     if (isLoading && logs.length === 0) {
         return (
-            <div className="p-8 bg-surface border border-white/5 rounded-3xl animate-pulse">
-                <div className="h-4 w-32 bg-white/5 rounded mb-6"></div>
+            <div className="p-8 bg-surface border border-black/5 rounded-3xl animate-pulse">
+                <div className="h-4 w-32 bg-black/5 rounded mb-6"></div>
                 <div className="space-y-6">
                     {[1, 2, 3].map(i => (
                         <div key={i} className="flex gap-4">
-                            <div className="h-8 w-8 rounded-full bg-white/5"></div>
+                            <div className="h-8 w-8 rounded-full bg-black/5"></div>
                             <div className="flex-1 space-y-2">
-                                <div className="h-3 w-full bg-white/5 rounded"></div>
-                                <div className="h-2 w-16 bg-white/5 rounded"></div>
+                                <div className="h-3 w-full bg-black/5 rounded"></div>
+                                <div className="h-2 w-16 bg-black/5 rounded"></div>
                             </div>
                         </div>
                     ))}
@@ -79,12 +79,12 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ workbookId, limit = 10, title
     }
 
     return (
-        <div className="p-8 bg-surface border border-white/5 rounded-3xl group">
+        <div className="p-8 bg-surface border border-black/5 rounded-3xl group">
             <div className="flex items-center justify-between mb-8">
                 <h3 className="font-syne text-[11px] font-bold text-text-dim uppercase tracking-widest leading-none">{title}</h3>
                 <button
                     onClick={fetchLogs}
-                    className="p-1.5 rounded-lg hover:bg-white/5 text-text-dim hover:text-text transition-all active:rotate-180 duration-500"
+                    className="p-1.5 rounded-lg hover:bg-black/5 text-text-dim hover:text-text transition-all active:rotate-180 duration-500"
                 >
                     <RefreshCw className="h-3.5 w-3.5" />
                 </button>
@@ -92,11 +92,11 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ workbookId, limit = 10, title
 
             <div className="space-y-8 relative">
                 {/* Vertical Timeline Line */}
-                <div className="absolute left-[15px] top-2 bottom-2 w-[1px] bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
+                <div className="absolute left-[15px] top-2 bottom-2 w-[1px] bg-gradient-to-b from-black/10 via-black/5 to-transparent" />
 
                 {logs.map((log) => (
                     <div key={log.id} className="relative flex gap-5 group/item">
-                        <div className="relative z-10 flex-shrink-0 h-8 w-8 rounded-full bg-surface border border-white/10 flex items-center justify-center shadow-xl group-hover/item:border-white/20 transition-colors">
+                        <div className="relative z-10 flex-shrink-0 h-8 w-8 rounded-full bg-surface border border-black/10 flex items-center justify-center shadow-xl group-hover/item:border-black/20 transition-colors">
                             {getIcon(log.type)}
                         </div>
 
@@ -104,7 +104,7 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ workbookId, limit = 10, title
                             <div className="flex items-center gap-2">
                                 {log.user && (
                                     <div className="flex items-center gap-1.5">
-                                        <div className="h-4 w-4 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                                        <div className="h-4 w-4 rounded-full bg-black/5 border border-black/10 flex items-center justify-center overflow-hidden">
                                             {log.user.avatarUrl ? (
                                                 <img src={log.user.avatarUrl} alt="" className="h-full w-full object-cover" />
                                             ) : (
@@ -133,14 +133,14 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ workbookId, limit = 10, title
 
                 {logs.length === 0 && (
                     <div className="py-12 text-center">
-                        <Clock className="h-8 w-8 text-white/5 mx-auto mb-3" />
+                        <Clock className="h-8 w-8 text-black/5 mx-auto mb-3" />
                         <p className="text-[12px] text-text-dim italic">The pulse is quiet. No recent activity yet.</p>
                     </div>
                 )}
             </div>
 
             {logs.length > 0 && (
-                <button className="w-full mt-10 py-3 rounded-2xl border border-white/5 text-[11px] font-bold text-text-dim hover:bg-white/5 hover:text-text transition-all tracking-widest uppercase">
+                <button className="w-full mt-10 py-3 rounded-2xl border border-black/5 text-[11px] font-bold text-text-dim hover:bg-black/5 hover:text-text transition-all tracking-widest uppercase">
                     View Full Audit Log
                 </button>
             )}

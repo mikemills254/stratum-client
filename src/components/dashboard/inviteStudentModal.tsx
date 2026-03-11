@@ -67,8 +67,8 @@ const InviteStudentModal: React.FC<InviteStudentModalProps> = ({ isOpen, onClose
 
     return (
         <Modal open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <ModalContent size="lg" className="bg-surface border-white/10 p-0 scrollbar-hidden">
-                <ModalHeader className="p-6 border-b border-white/5 space-y-1">
+            <ModalContent size="lg" className="bg-surface border-black/10 p-0 scrollbar-hidden">
+                <ModalHeader className="p-6 border-b border-black/5 space-y-1">
                     <ModalTitle className="text-[20px] font-bold text-text font-syne uppercase tracking-wider text-left">
                         Invite Students
                     </ModalTitle>
@@ -85,7 +85,7 @@ const InviteStudentModal: React.FC<InviteStudentModalProps> = ({ isOpen, onClose
                             placeholder="Type student name or email..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium"
+                            className="w-full bg-black/5 border border-black/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium"
                             autoFocus
                         />
                     </div>
@@ -98,7 +98,7 @@ const InviteStudentModal: React.FC<InviteStudentModalProps> = ({ isOpen, onClose
                             </div>
                         ) : results.length > 0 ? (
                             results.map((user: IUser) => (
-                                <div key={user.uid} className="group p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all">
+                                <div key={user.uid} className="group p-4 bg-black/5 border border-black/5 rounded-2xl flex items-center justify-between hover:bg-black/10 transition-all">
                                     <div className="flex items-center gap-4">
                                         <div className="h-10 w-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
                                             {user.avatarUrl ? (
@@ -144,7 +144,7 @@ const InviteStudentModal: React.FC<InviteStudentModalProps> = ({ isOpen, onClose
                             </div>
                         ) : (
                             <div className="py-12 text-center">
-                                <div className="h-12 w-12 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <div className="h-12 w-12 bg-black/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                     <Search className="h-6 w-6 text-text-dim opacity-20" />
                                 </div>
                                 <p className="text-text-dim italic text-[13px]">Find students to invite to this workbook</p>
@@ -153,10 +153,10 @@ const InviteStudentModal: React.FC<InviteStudentModalProps> = ({ isOpen, onClose
                     </div>
                 </ModalBody>
 
-                <ModalFooter className="p-4 bg-white/5 flex justify-end">
+                <ModalFooter className="p-4 bg-black/5 flex justify-end">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2.5 rounded-xl border border-white/10 text-[13px] font-bold text-text hover:bg-white/5 transition-all"
+                        className="px-6 py-2.5 rounded-xl border border-black/10 text-[13px] font-bold text-text hover:bg-black/5 transition-all"
                     >
                         Done
                     </button>

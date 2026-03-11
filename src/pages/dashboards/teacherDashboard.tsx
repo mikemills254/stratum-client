@@ -131,7 +131,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                 const updatedAnswer = {
                     ...selectedAnswer,
                     grade: res.data,
-                    status: 'GRADED' as any // Backend updates status too
+                    status: 'GRADED' as any
                 };
                 setSelectedAnswer(updatedAnswer);
                 setAnswers(answers.map(a => a.id === updatedAnswer.id ? updatedAnswer : a));
@@ -280,7 +280,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[800px]">
             {/* Left Sidebar: Navigator */}
             <div className="lg:col-span-4 space-y-6">
-                <div className="p-5 bg-surface border border-white/5 rounded-2xl">
+                <div className="p-5 bg-surface border border-black/5 rounded-2xl">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2 text-amber">
                             <FileText className="h-4 w-4" />
@@ -306,12 +306,12 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                         {worksheets.map((ws: Worksheet) => (
                             <div key={ws.id} className="group/ws">
                                 {/* Worksheet Item */}
-                                <div className={`flex items-center gap-3 p-3 rounded-2xl transition-all border ${selectedWorksheet?.id === ws.id ? 'bg-white/5 border-white/10 shadow-lg' : 'border-transparent hover:bg-white/5'}`}>
+                                <div className={`flex items-center gap-3 p-3 rounded-2xl transition-all border ${selectedWorksheet?.id === ws.id ? 'bg-black/5 border-black/10' : 'border-transparent hover:bg-black/5'}`}>
                                     <button
                                         onClick={() => setSelectedWorksheet(ws)}
                                         className="flex-1 text-left flex items-center gap-3 min-w-0 cursor-pointer"
                                     >
-                                        <div className={`p-2 rounded-xl transition-colors ${selectedWorksheet?.id === ws.id ? 'bg-amber text-bg' : 'bg-white/5 text-text-dim group-hover/ws:text-text'}`}>
+                                        <div className={`p-2 rounded-xl transition-colors ${selectedWorksheet?.id === ws.id ? 'bg-amber text-bg' : 'bg-black/5 text-text-dim group-hover/ws:text-text'}`}>
                                             <FileText className="h-4 w-4" />
                                         </div>
                                         <div className="min-w-0">
@@ -344,10 +344,10 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
 
                                 {/* Questions Nested List */}
                                 {selectedWorksheet?.id === ws.id && (
-                                    <div className="mt-2 ml-5 pl-4 border-l-2 border-white/5 space-y-1 relative">
+                                    <div className="mt-2 ml-5 pl-4 border-l-2 border-black/5 space-y-1 relative">
                                         {ws.questions?.map((q: Question, i: number) => (
                                             <div key={q.id} className="group/q flex items-center gap-2 relative cursor-pointer">
-                                                <div className="absolute -left-[18px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/10 group-hover/q:bg-amber/40 transition-colors" />
+                                                <div className="absolute -left-[18px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black/10 group-hover/q:bg-amber/40 transition-colors" />
 
                                                 <button
                                                     onClick={() => setSelectedQuestion(q)}
@@ -396,11 +396,11 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                 {selectedAnswer ? (
                     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
                         {/* Header with Back Button */}
-                        <div className="flex items-center justify-between p-6 bg-surface border border-white/5 rounded-2xl shadow-xl shadow-black/20">
+                        <div className="flex items-center justify-between p-6 bg-surface border border-black/5 rounded-2xl shadow-sm ">
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => setSelectedAnswer(null)}
-                                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-text-dim hover:text-text transition-all border border-white/5"
+                                    className="p-2 rounded-xl bg-black/5 hover:bg-black/10 text-text-dim hover:text-text transition-all border border-black/5"
                                     title="Back to submissions"
                                 >
                                     <ChevronDown className="h-4 w-4 rotate-90" />
@@ -424,7 +424,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                             </div>
                         </div>
 
-                        <div className="p-8 bg-surface border border-white/5 rounded-2xl space-y-6">
+                        <div className="p-8 bg-surface border border-black/5 rounded-2xl space-y-6">
                             <div className="flex items-center justify-between mb-2">
                                 <label className="font-mono text-[10px] text-text-dim uppercase tracking-[0.2em]">Student Response</label>
                             </div>
@@ -438,7 +438,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
 
                         {/* Grading & Annotations Panel */}
                         <div className="flex flex-col gap-6">
-                            <div className="p-6 bg-surface border border-white/5 rounded-2xl space-y-6 flex flex-col h-full">
+                            <div className="p-6 bg-surface border border-black/5 rounded-2xl space-y-6 flex flex-col h-full">
                                 <div className="flex items-center gap-2 text-blue-400">
                                     <MessageSquare className="h-4 w-4" />
                                     <h3 className="font-syne text-[14px] font-bold uppercase tracking-wider">Annotations</h3>
@@ -446,7 +446,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                 <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                                     {selectedAnswer.annotations?.length > 0 ? (
                                         selectedAnswer.annotations.map((ann) => (
-                                            <div key={ann.id} className="p-4 bg-white/5 border border-white/5 rounded-xl text-left">
+                                            <div key={ann.id} className="p-4 bg-black/5 border border-black/5 rounded-xl text-left">
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <div className="h-8 w-8 rounded-lg bg-emerald-500/20 flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-emerald-400 uppercase overflow-hidden">
                                                         {ann.teacher?.avatarUrl ? (
@@ -463,14 +463,14 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                                     <div className="ml-auto flex items-center gap-1">
                                                         <button
                                                             onClick={() => handleAnnotationEdit(ann.id, ann.comment)}
-                                                            className="p-1 rounded-lg hover:bg-white/10 text-text-dim hover:text-amber transition-colors"
+                                                            className="p-1 rounded-lg hover:bg-black/10 text-text-dim hover:text-amber transition-colors"
                                                             title="Edit"
                                                         >
                                                             <Pencil className="h-3 w-3" />
                                                         </button>
                                                         <button
                                                             onClick={() => handleAnnotationDelete(ann.id)}
-                                                            className="p-1 rounded-lg hover:bg-white/10 text-text-dim hover:text-red-400 transition-colors"
+                                                            className="p-1 rounded-lg hover:bg-black/10 text-text-dim hover:text-red-400 transition-colors"
                                                             title="Delete"
                                                         >
                                                             <Trash2 className="h-3 w-3" />
@@ -487,26 +487,26 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-auto pt-4 border-t border-white/5 flex gap-2">
+                                <div className="mt-auto pt-4 border-t border-black/5 flex gap-2">
                                     <input
                                         type="text"
                                         value={newAnnotationText}
                                         onChange={e => setNewAnnotationText(e.target.value)}
                                         placeholder="Add a new annotation..."
-                                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[13px] text-text focus:outline-none focus:border-amber/50 transition-colors"
+                                        className="flex-1 bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-[13px] text-text focus:outline-none focus:border-amber/50 transition-colors"
                                         onKeyDown={e => e.key === 'Enter' && handleAnnotationSubmit()}
                                     />
                                     <button
                                         onClick={handleAnnotationSubmit}
                                         disabled={!newAnnotationText.trim() || isSubmittingAnnotation}
-                                        className="px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center transition-all disabled:opacity-50"
+                                        className="px-4 bg-blue-500 hover:bg-blue-600 text-text rounded-xl font-bold flex items-center justify-center transition-all disabled:opacity-50"
                                     >
                                         <Send className="h-4 w-4" />
                                     </button>
                                 </div>
                             </div>
                             {/* Grading Panel */}
-                            <div className="p-6 bg-surface border border-white/5 rounded-2xl space-y-6">
+                            <div className="p-6 bg-surface border border-black/5 rounded-2xl space-y-6">
                                 <div className="flex items-center gap-2 text-amber">
                                     <CheckCircle className="h-4 w-4" />
                                     <h3 className="font-syne text-[14px] font-bold uppercase tracking-wider">Grade</h3>
@@ -518,7 +518,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                             type="number"
                                             value={grading.score}
                                             onChange={e => setGrading({ ...grading, score: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-text focus:outline-none focus:border-amber/50 transition-colors"
+                                            className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-text focus:outline-none focus:border-amber/50 transition-colors"
                                             placeholder="Enter score..."
                                         />
                                     </div>
@@ -528,13 +528,13 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                             rows={4}
                                             value={grading.feedback}
                                             onChange={e => setGrading({ ...grading, feedback: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-text focus:outline-none focus:border-amber/50 transition-colors resize-none"
+                                            className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-text focus:outline-none focus:border-amber/50 transition-colors resize-none"
                                             placeholder="Provide constructive feedback..."
                                         />
                                     </div>
                                     <button
                                         onClick={handleGradeSubmit}
-                                        className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-900/20 transition-all hover:-translate-y-px"
+                                        className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-text rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-900/20 transition-all hover:-translate-y-px"
                                     >
                                         <Send className="h-4 w-4" />
                                         Submit Grade for Approval
@@ -548,7 +548,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                 ) : selectedQuestion ? (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {/* Question Detail Banner */}
-                        <div className="p-8 bg-gradient-to-br from-surface to-surface-2 border border-white/5 rounded-3xl relative overflow-hidden group">
+                        <div className="p-8 bg-gradient-to-br from-surface to-surface-2 border border-black/5 rounded-3xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 blur-[100px] rounded-full group-hover:scale-150 transition-transform duration-1000" />
                             <div className="relative z-10">
                                 <label className="font-mono text-[10px] text-amber uppercase tracking-[0.3em] mb-3 block opacity-70">Currently Viewing Question</label>
@@ -574,7 +574,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                 <button
                                     key={ans.id}
                                     onClick={() => setSelectedAnswer(ans)}
-                                    className="p-5 bg-surface-2 hover:bg-surface border border-white/5 hover:border-amber/40 rounded-3xl text-left transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 group flex flex-col h-full min-h-[160px]"
+                                    className="p-5 bg-surface-2 hover:bg-surface border border-black/5 hover:border-amber/40 rounded-3xl text-left transition-all cursor-pointer group flex flex-col h-full min-h-[160px]"
                                 >
                                     <div className="flex items-start justify-between mb-5">
                                         <div className="flex items-center gap-3">
@@ -603,7 +603,7 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto w-full">
+                                    <div className="flex items-center justify-between pt-4 border-t border-black/5 mt-auto w-full">
                                         <div className="flex items-center gap-4">
                                             {ans.annotations?.length > 0 && (
                                                 <div className="flex items-center gap-1.5 text-blue-400 text-[11px] font-bold">
@@ -621,8 +621,8 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                             ))}
 
                             {answers.length === 0 && (
-                                <div className="col-span-full py-20 bg-white/5 border border-dashed border-white/10 rounded-3xl flex flex-col items-center justify-center text-center">
-                                    <div className="p-4 rounded-full bg-white/5 mb-4">
+                                <div className="col-span-full py-20 bg-black/5 border border-dashed border-black/10 rounded-3xl flex flex-col items-center justify-center text-center">
+                                    <div className="p-4 rounded-full bg-black/5 mb-4">
                                         <MessageSquare className="h-8 w-8 text-text-dim" />
                                     </div>
                                     <h3 className="text-text font-instrument italic mb-1 text-lg">No submissions yet</h3>
@@ -632,8 +632,8 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ workbookId }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="h-full flex flex-col items-center justify-center p-12 bg-surface/30 border border-dashed border-white/10 rounded-3xl text-center min-h-[500px]">
-                        <div className="p-6 rounded-full bg-white/5 border border-white/5 mb-6">
+                    <div className="h-full flex flex-col items-center justify-center p-12 bg-surface/30 border border-dashed border-black/10 rounded-3xl text-center min-h-[500px]">
+                        <div className="p-6 rounded-full bg-black/5 border border-black/5 mb-6">
                             <FileText className="h-10 w-10 text-text-dim" />
                         </div>
                         <h2 className="text-xl font-instrument italic text-text mb-2">Select a Question</h2>

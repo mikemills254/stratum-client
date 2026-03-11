@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Plus,
     MoreHorizontal,
     ArrowUpRight,
-    Flame,
     ArrowRightLeft,
-    CheckCircle2
+    Users,
+    FileText as FileIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Wrapper from '../../components/ui/wrapper';
 import { useAuthStore } from '../../store/authStore';
 import { handleGetWorkBooks } from '@/api/workbook';
+import { handleGetAuditLogs } from '@/api/auditLog';
 import toast from 'react-hot-toast';
+import { formatDistanceToNow } from 'date-fns';
 import type { Workbook } from '@/types/workbooks';
 import CreateWorkBook from './createworkbook';
 
@@ -19,6 +20,7 @@ export const WorkbookPage: React.FC = () => {
     const { user } = useAuthStore();
     const isDirector = user?.role?.toLowerCase() === 'director';
     const [workbooks, setWorkbooks] = useState<Workbook[]>([])
+    const [auditLogs, setAuditLogs] = useState<any[]>([])
 
     const fetchData = async () => {
         try {
@@ -32,8 +34,13 @@ export const WorkbookPage: React.FC = () => {
             if (results.data) {
                 setWorkbooks(results.data)
             }
+
+            const logsRes = await handleGetAuditLogs({ limit: 3 })
+            if (logsRes.success && logsRes.data) {
+                setAuditLogs(logsRes.data)
+            }
         } catch (error) {
-            console.log("errior", error)
+            console.log("error", error)
         }
     }
 
@@ -73,7 +80,7 @@ export const WorkbookPage: React.FC = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-5">
                             {workbooks.map((book) => (
-                                <Link to={`/workbook/${book.id}`} key={book.id} className="group p-5 bg-surface border border-border rounded-2xl flex flex-col hover:border-white/10 hover:shadow-[0_24px_64px_rgba(0,0,0,0.4)] transition-all duration-500 relative overflow-hidden">
+                                <Link to={`/workbook/${book.id}`} key={book.id} className="group p-5 bg-surface border border-border rounded-2xl flex flex-col hover:border-black/10 hover:shadow-sm transition-all duration-500 relative overflow-hidden">
                                     <div className="flex gap-5 mb-5">
                                         <div className="flex-1 min-w-0 space-y-2">
                                             <div className="flex items-start justify-between mb-2">
@@ -85,18 +92,33 @@ export const WorkbookPage: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="mt-auto pt-5 border-t border-white/5">
-                                        <div className="flex items-center justify-between mb-2.5">
-                                            <span className="text-[11px] font-mono font-bold text-text-mid tracking-tight leading-none group-hover:text-text transition-colors">{(book as any).progress || 0}% COMPLETE</span>
-                                            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-surface-2 border border-border group-hover:bg-amber group-hover:text-bg group-hover:border-amber transition-all duration-500">
-                                                <ArrowUpRight className="h-3.5 w-3.5" />
+                                    <div className="mt-auto pt-5 border-t border-black/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-6">
+                                            <div className="flex items-center gap-2">
+                                                <div className="p-1.5 rounded-lg bg-black/5 text-text-dim">
+                                                    <FileIcon className="h-3.5 w-3.5" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[11px] font-bold text-text leading-none">{book._count?.worksheets || 0}</span>
+                                                    <span className="text-[9px] font-mono text-text-dim uppercase tracking-wider">Worksheets</span>
+                                                </div>
                                             </div>
+
+                                            {(user?.role === 'DIRECTOR' || user?.role === 'TEACHER') && (
+                                                <div className="flex items-center gap-2">
+                                                    <div className="p-1.5 rounded-lg bg-black/5 text-text-dim">
+                                                        <Users className="h-3.5 w-3.5" />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[11px] font-bold text-text leading-none">{book._count?.memberships || 0}</span>
+                                                        <span className="text-[9px] font-mono text-text-dim uppercase tracking-wider">Members</span>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="h-1.5 w-full bg-surface-3 rounded-full overflow-hidden border border-white/5">
-                                            <div
-                                                className="h-full bg-gradient-to-r from-amber to-[#ff6b35] transition-all duration-1000 ease-out rounded-full shadow-[0_0_8px_rgba(232,160,32,0.3)]"
-                                                style={{ width: `${(book as any).progress || 0}%` }}
-                                            ></div>
+
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-surface-2 border border-border group-hover:bg-amber group-hover:text-bg group-hover:border-amber transition-all duration-500 shadow-sm">
+                                            <ArrowUpRight className="h-4 w-4" />
                                         </div>
                                     </div>
                                 </Link>
@@ -111,33 +133,31 @@ export const WorkbookPage: React.FC = () => {
                             <h2 className="font-syne text-[18px] font-bold text-text tracking-tight">Live Updates</h2>
                             <div className="p-7 bg-surface border border-border rounded-2xl relative overflow-hidden">
                                 <div className="space-y-8 relative">
-                                    {[
-                                        { text: 'Finished Lesson 4 in Engineering', time: '12m ago', icon: CheckCircle2 },
-                                        { text: 'New assignment added by Director', time: '1h ago', icon: Plus },
-                                        { text: 'Achieved a 5-day study streak!', time: '3h ago', icon: Flame },
-                                    ].map((item, i, arr) => (
-                                        <div key={i} className="flex gap-4 relative">
-                                            {i !== arr.length - 1 && <div className="absolute left-2 top-6 bottom-0 w-px bg-white/5"></div>}
+                                    {auditLogs.length > 0 ? auditLogs.map((item, i, arr) => (
+                                        <div key={item.id} className="flex gap-4 relative">
+                                            {i !== arr.length - 1 && <div className="absolute left-2 top-6 bottom-0 w-px bg-black/5"></div>}
                                             <div className="h-4.5 w-4.5 rounded-full bg-amber/10 border border-amber/25 flex items-center justify-center flex-shrink-0 z-10 mt-0.5 shadow-[0_0_12px_rgba(232,160,32,0.1)]">
                                                 <div className="h-1.5 w-1.5 rounded-full bg-amber animate-pulse"></div>
                                             </div>
                                             <div>
-                                                <p className="text-[13px] font-medium text-text leading-tight mb-1">{item.text}</p>
-                                                <p className="font-mono text-[9px] text-text-dim uppercase tracking-widest">{item.time}</p>
+                                                <p className="text-[13px] font-medium text-text leading-tight mb-1">{item.title}</p>
+                                                <p className="font-mono text-[9px] text-text-dim uppercase tracking-widest">{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</p>
                                             </div>
                                         </div>
-                                    ))}
+                                    )) : (
+                                        <p className="text-[13px] text-text-dim py-4">No recent activity.</p>
+                                    )}
                                 </div>
-                                <button className="w-full mt-10 py-3 bg-surface-2 hover:bg-surface-3 border border-white/5 text-[12px] font-bold text-text-mid hover:text-text rounded-lg transition-all">
+                                <button className="w-full mt-10 py-3 bg-surface-2 hover:bg-surface-3 border border-black/5 text-[12px] font-bold text-text-mid hover:text-text rounded-lg transition-all">
                                     VIEW FULL AUDIT LOG
                                 </button>
                             </div>
                         </div>
 
                         {/* Recommendation Card */}
-                        <div className="p-8 bg-gradient-to-br from-amber to-[#ff6b35] rounded-2xl text-bg shadow-[0_24px_64px_rgba(232,160,32,0.25)] group cursor-pointer overflow-hidden relative border border-white/20">
+                        <div className="p-8 bg-gradient-to-br from-amber to-[#ff6b35] rounded-2xl text-bg shadow-[0_24px_64px_rgba(232,160,32,0.25)] group cursor-pointer overflow-hidden relative border border-black/20">
                             <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-10 pointer-events-none" />
-                            <div className="absolute -right-6 -bottom-6 h-32 w-32 bg-white/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
+                            <div className="absolute -right-6 -bottom-6 h-32 w-32 bg-black/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
 
                             <label className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] bg-bg/20 px-2.5 py-1 rounded-full mb-6 inline-block opacity-90 border border-bg/10">// PRO RECOMMENDATION</label>
                             <h3 className="font-instrument text-[28px] font-bold italic mb-3 leading-[1.1] tracking-tight">Advanced Distributed Systems</h3>

@@ -118,10 +118,10 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
     const progress = calculateProgress();
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar: Navigation & Progress */}
-            <div className="lg:col-span-1 space-y-6">
-                <div className="p-5 bg-surface border border-white/5 rounded-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+            {/* Left Sidebar: Navigation & Progress (col-span-3) */}
+            <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-8 h-fit">
+                <div className="p-5 bg-surface border border-black/5 rounded-2xl">
                     <div className="flex items-center gap-2 text-amber/60 mb-6">
                         <FileText className="h-4 w-4" />
                         <h3 className="font-syne text-[11px] font-bold uppercase tracking-[0.2em]">Curriculum</h3>
@@ -134,7 +134,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                                 onClick={() => setActiveWorksheet(ws)}
                                 className={`group w-full text-left p-3 rounded-xl transition-all duration-300 border flex items-center justify-between ${activeWorksheet?.id === ws.id
                                     ? 'bg-amber/10 border-amber/20 text-amber'
-                                    : 'bg-white/5 border-transparent text-text-dim hover:bg-white/10 hover:text-text'
+                                    : 'bg-black/5 border-transparent text-text-dim hover:bg-black/10 hover:text-text'
                                     }`}
                             >
                                 <div className="flex flex-col min-w-0 pr-2">
@@ -147,7 +147,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                     </div>
                 </div>
 
-                <div className="p-6 bg-surface-2 border border-white/5 rounded-2xl relative overflow-hidden group">
+                <div className="p-6 bg-surface-2 border border-black/5 rounded-2xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-amber/5 blur-2xl rounded-full group-hover:scale-150 transition-transform duration-1000" />
 
                     <div className="relative z-10">
@@ -158,7 +158,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                             <h4 className="text-[14px] font-bold text-text font-syne uppercase tracking-wider">Overall Progress</h4>
                         </div>
 
-                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 mb-3">
+                        <div className="h-1.5 w-full bg-black/5 rounded-full overflow-hidden border border-black/5 mb-3">
                             <div
                                 className="h-full bg-gradient-to-r from-amber to-orange-500 transition-all duration-1000 shadow-[0_0_12px_rgba(232,160,32,0.3)]"
                                 style={{ width: `${progress}%` }}
@@ -175,11 +175,11 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                 <ActivityLog workbookId={workbookId} title="My Milestones" limit={5} />
             </div>
 
-            {/* Main Content: Questions & Answers */}
-            <div className="lg:col-span-3 space-y-8">
+            {/* Main Content: Questions & Answers (col-span-6) */}
+            <div className="lg:col-span-6 space-y-8">
                 {activeWorksheet ? (
                     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                        <div className="relative p-8 rounded-3xl bg-surface border border-white/5 overflow-hidden group">
+                        <div className="relative p-8 rounded-3xl bg-surface border border-black/5 overflow-hidden group">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 blur-[100px] rounded-full" />
                             <div className="relative z-10">
                                 <label className="font-mono text-[10px] text-amber uppercase tracking-[0.3em] mb-3 block opacity-70">Active Worksheet</label>
@@ -212,7 +212,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
 
                                         <div className="pl-14 space-y-6">
                                             <div className="relative">
-                                                <div className="absolute -left-14 top-0 bottom-0 w-px bg-white/5 group-hover/q:bg-amber/10 transition-colors" />
+                                                <div className="absolute -left-14 top-0 bottom-0 w-px bg-black/5 group-hover/q:bg-amber/10 transition-colors" />
 
                                                 {answer?.id ? (
                                                     <div className="space-y-4">
@@ -239,13 +239,13 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <div className="h-[140px] flex items-center justify-center bg-surface border border-white/5 rounded-xl text-[10px] font-mono text-text-dim uppercase tracking-widest animate-pulse">
+                                                    <div className="h-[140px] flex items-center justify-center bg-surface border border-black/5 rounded-xl text-[10px] font-mono text-text-dim uppercase tracking-widest animate-pulse">
                                                         Initializing Editor...
                                                     </div>
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                                            <div className="flex items-center justify-between pt-4 border-t border-black/5">
                                                 <div className="flex items-center gap-4 text-[11px] font-mono text-text-dim uppercase tracking-wider">
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock className="h-3.5 w-3.5" />
@@ -281,29 +281,6 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                                                 )}
                                             </div>
 
-                                            {/* Annotations Section */}
-                                            {answer?.annotations && answer.annotations.length > 0 && (
-                                                <div className="pt-4 border-t border-white/5 space-y-4">
-                                                    <label className="font-mono text-[10px] text-blue-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                                        <MessageSquare className="h-3 w-3" />
-                                                        Teacher Feedback
-                                                    </label>
-                                                    {answer.annotations.map((annot) => (
-                                                        <div key={annot.id} className="p-4 rounded-xl bg-blue-400/5 border border-blue-400/10 flex gap-4">
-                                                            <div className="h-8 w-8 rounded-lg bg-blue-400/20 flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-blue-400 uppercase">
-                                                                {annot.teacher.username.charAt(0)}
-                                                            </div>
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center justify-between mb-1">
-                                                                    <span className="text-[12px] font-bold text-text">{annot.teacher.username}</span>
-                                                                    <span className="text-[10px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span>
-                                                                </div>
-                                                                <p className="text-[13px] text-text-mid leading-relaxed">{annot.comment}</p>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                 );
@@ -311,14 +288,66 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="h-[500px] flex flex-col items-center justify-center border border-white/5 rounded-3xl bg-surface/50 backdrop-blur-sm p-12 text-center">
-                        <div className="h-16 w-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
+                    <div className="h-[500px] flex flex-col items-center justify-center border border-black/5 rounded-3xl bg-surface/50 backdrop-blur-sm p-12 text-center">
+                        <div className="h-16 w-16 rounded-2xl bg-black/5 flex items-center justify-center mb-6">
                             <FileText className="h-8 w-8 text-text-dim opacity-20" />
                         </div>
                         <h3 className="text-xl font-syne font-bold text-text mb-2 tracking-tight">Select a Worksheet</h3>
                         <p className="text-text-dim text-[14px] font-light max-w-xs">Pick a task from the curriculum to begin your educational journey.</p>
                     </div>
                 )}
+            </div>
+
+            {/* Right Sidebar: Annotations (col-span-3) */}
+            <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-8 h-fit max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar pr-2">
+                <div className="p-5 bg-surface border border-black/5 rounded-2xl">
+                    <div className="flex items-center gap-2 text-blue-500 mb-6">
+                        <MessageSquare className="h-4 w-4" />
+                        <h3 className="font-syne text-[11px] font-bold uppercase tracking-[0.2em]">Teacher Feedback</h3>
+                    </div>
+
+                    <div className="space-y-4">
+                        {activeWorksheet && activeWorksheet.questions ? (
+                            activeWorksheet.questions.map(q => {
+                                const answer = answers[q.id];
+                                if (!answer?.annotations || answer.annotations.length === 0) return null;
+
+                                return (
+                                    <div key={`annotations-group-${q.id}`} className="space-y-3">
+                                        <div className="text-[11px] font-mono text-text-dim uppercase tracking-wider border-b border-black/5 pb-1 mb-2">
+                                            Q: {q.text.length > 30 ? q.text.substring(0, 30) + '...' : q.text}
+                                        </div>
+                                        {answer.annotations.map((annot) => (
+                                            <div key={annot.id} className="p-4 rounded-xl relative bg-blue-500/5 border border-blue-500/10">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="h-6 w-6 rounded-md bg-blue-500/20 flex-shrink-0 flex items-center justify-center text-[9px] font-bold text-blue-600 uppercase">
+                                                        {annot.teacher.username.charAt(0)}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0 space-y-1">
+                                                        <div className="flex items-center justify-between">
+                                                            <span className="text-[11px] font-bold text-text">{annot.teacher.username}</span>
+                                                            <span className="text-[9px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span>
+                                                        </div>
+                                                        <p className="text-[12px] text-text-mid leading-relaxed break-words">{annot.comment}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <p className="text-[12px] text-text-dim text-center py-8 px-4 opacity-60">
+                                Select a worksheet to review teacher feedback and annotations on your submitted answers.
+                            </p>
+                        )}
+                        {activeWorksheet?.questions?.every(q => !answers[q.id]?.annotations?.length) && (
+                            <p className="text-[12px] text-text-dim text-center py-8 px-4 opacity-60">
+                                No feedback available for this worksheet yet.
+                            </p>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

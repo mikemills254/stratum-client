@@ -8,7 +8,13 @@ export interface Workbook {
     createdAt: Date;
     updatedAt: Date;
     tag: string;
-    isArchived: boolean
+    isPrivate: boolean;
+    isArchived: boolean;
+    _count?: {
+        worksheets: number;
+        memberships: number;
+        students: number;
+    }
 }
 
 export interface IGetWorkBooks extends IApiResponse {

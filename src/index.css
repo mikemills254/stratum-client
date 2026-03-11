@@ -1,22 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif&display=swap");
+
 @import "tailwindcss";
 
 @theme {
-    --color-bg: #05050a;
-    --color-surface: #0c0c14;
-    --color-surface-2: #12121e;
-    --color-surface-3: #1a1a28;
-    --color-border: #1e1e30;
-    --color-border-light: #2a2a40;
-    --color-amber: #e8a020;
-    --color-amber-bright: #ffb733;
-    --color-amber-dim: rgba(232, 160, 32, 0.08);
-    --color-amber-glow: rgba(232, 160, 32, 0.2);
-    --color-amber-glow-2: rgba(232, 160, 32, 0.35);
-    --color-blue: #4488ff;
-    --color-green: #2dd4a0;
-    --color-text: #eeeef5;
-    --color-text-mid: #8888aa;
-    --color-text-dim: #44445a;
+    --color-bg: #f8f7f4;
+    --color-surface: #ffffff;
+    --color-surface-2: #f2f1ec;
+    --color-surface-3: #e5e3de;
+    --color-border: #e5e3de;
+    --color-border-light: #d1cfc9;
+    --color-amber: #b8860b;
+    --color-amber-bright: #d4a017;
+    --color-amber-dim: rgba(184, 134, 11, 0.08);
+    --color-amber-glow: rgba(184, 134, 11, 0.2);
+    --color-amber-glow-2: rgba(184, 134, 11, 0.35);
+    --color-blue: #1d4ed8;
+    --color-green: #065f46;
+    --color-text: #222222;
+    --color-text-mid: #555555;
+    --color-text-dim: #777777;
 
     --background-image-gradient: linear-gradient(135deg, #e8a020, #ff6b35);
 
@@ -52,6 +54,7 @@
     --animate-float-y: float-y 3s ease-in-out infinite;
     --animate-blink: blink 1s infinite;
 }
+
 
 @layer base {
     * {

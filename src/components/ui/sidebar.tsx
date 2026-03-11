@@ -23,7 +23,7 @@ export default function SideBar() {
 
     const navItems = [
         { icon: BookOpen, label: 'Workbooks', path: '/workbook' },
-        { icon: Compass, label: 'Explore', path: '/explore' },
+        ...(user?.role !== Role.DIRECTOR ? [{ icon: Compass, label: 'Explore', path: '/explore' }] : []),
         { icon: Library, label: 'Library', path: '/library' },
     ];
 
@@ -31,7 +31,7 @@ export default function SideBar() {
 
     return (
         <div className={`flex h-screen flex-col border-r border-border bg-surface relative z-[10] transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-64'}`}>
-            <div className={`flex h-[68px] items-center mb-4 border-b border-white/5 transition-all duration-300 ${isCollapsed ? 'px-4 justify-center' : 'px-6'}`}>
+            <div className={`flex h-[68px] items-center mb-4 border-b border-black/5 transition-all duration-300 ${isCollapsed ? 'px-4 justify-center' : 'px-6'}`}>
                 <div className="flex items-center gap-2.5 group">
                     <div className="flex flex-col gap-[3.5px] w-7 shrink-0">
                         <div className="h-[2.5px] w-full rounded-sm bg-amber" />
@@ -100,7 +100,7 @@ export default function SideBar() {
                             <div className="absolute top-[-20px] right-[-20px] w-16 h-16 bg-amber/5 blur-xl rounded-full group-hover:scale-150 transition-transform duration-500" />
                             <p className="font-syne text-[14px] font-bold text-text mb-1">Stratum Pro</p>
                             <p className="text-[11px] text-text-mid mb-4 leading-relaxed">Unlimited workbooks and collaboration tools.</p>
-                            <button className="w-full py-2 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-lg text-[12px] font-bold shadow-[0_4px_12px_rgba(232,160,32,0.2)] hover:shadow-[0_8px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px transition-all">
+                            <button className="w-full py-2 bg-gradient-to-br from-amber to-[#ff6b35] text-text rounded-lg text-[12px] font-bold shadow-[0_4px_12px_rgba(232,160,32,0.2)] hover:shadow-[0_8px_20px_rgba(232,160,32,0.3)] hover:-translate-y-px transition-all">
                                 Upgrade Now
                             </button>
                         </div>

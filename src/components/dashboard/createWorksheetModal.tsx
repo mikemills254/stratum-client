@@ -58,9 +58,9 @@ const CreateWorksheetModal: React.FC<CreateWorksheetModalProps> = ({ isOpen, onC
 
     return (
         <Modal open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <ModalContent size="default" className="bg-surface border-white/10 p-0 scrollbar-hidden">
+            <ModalContent size="default" className="bg-surface border-black/10 p-0 scrollbar-hidden">
                 <form onSubmit={handleSubmit}>
-                    <ModalHeader className="p-6 border-b border-white/5 space-y-1">
+                    <ModalHeader className="p-6 border-b border-black/5 space-y-1">
                         <ModalTitle className="text-[20px] font-bold text-text font-syne uppercase tracking-wider text-left">
                             New Worksheet
                         </ModalTitle>
@@ -85,7 +85,7 @@ const CreateWorksheetModal: React.FC<CreateWorksheetModalProps> = ({ isOpen, onC
                                     placeholder="e.g. Introduction to Calculus"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium"
+                                    className="w-full bg-black/5 border border-black/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium"
                                     autoFocus
                                 />
                             </div>
@@ -100,17 +100,17 @@ const CreateWorksheetModal: React.FC<CreateWorksheetModalProps> = ({ isOpen, onC
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     rows={4}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium resize-none"
+                                    className="w-full bg-black/5 border border-black/10 rounded-2xl py-4 pl-12 pr-4 text-text placeholder:text-text-dim focus:outline-none focus:border-amber/50 transition-all font-medium resize-none"
                                 />
                             </div>
                         </div>
                     </ModalBody>
 
-                    <ModalFooter className="p-6 border-t border-white/5 flex gap-3">
+                    <ModalFooter className="p-6 border-t border-black/5 flex gap-3">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-4 rounded-2xl border border-white/10 text-[13px] font-bold text-text hover:bg-white/5 transition-all"
+                            className="flex-1 px-6 py-4 rounded-2xl border border-black/10 text-[13px] font-bold text-text hover:bg-black/5 transition-all"
                         >
                             Cancel
                         </button>

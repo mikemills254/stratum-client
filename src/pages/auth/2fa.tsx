@@ -107,7 +107,7 @@ export const TwoFactorPage: React.FC = () => {
                 <div className="space-y-4">
                     <button
                         disabled={!isComplete || loading}
-                        className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                        className="w-full py-4 bg-gradient-to-br from-amber to-[#ff6b35] text-text rounded-xl text-[15px] font-bold shadow-[0_8px_24px_rgba(232,160,32,0.3)] hover:-translate-y-px hover:shadow-[0_12px_36px_rgba(232,160,32,0.4)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     >
                         {loading ? 'Verifying...' : 'Verify & Continue →'}
                     </button>

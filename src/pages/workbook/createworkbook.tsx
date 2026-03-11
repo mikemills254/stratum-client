@@ -15,7 +15,8 @@ export const CreateWorkBook: React.FC = () => {
         initialValues: {
             name: "",
             description: "",
-            tag: ""
+            tag: "",
+            isPrivate: false
         },
         onSubmit: async (values, { setSubmitting }) => {
             if (!values.name) {
@@ -45,16 +46,16 @@ export const CreateWorkBook: React.FC = () => {
         <>
             <button
                 onClick={() => setIsOpen(true)}
-                className="flex cursor-pointer items-center gap-2.5 px-6 py-3.5 bg-gradient-to-br from-amber to-[#ff6b35] text-white rounded-md font-bold shadow-[0_8px_32px_rgba(232,160,32,0.3)] transition-all hover:scale-105 active:scale-95"
+                className="flex cursor-pointer items-center gap-2.5 px-6 py-3.5 bg-gradient-to-br from-amber to-[#ff6b35] text-text rounded-md font-bold shadow-[0_8px_32px_rgba(232,160,32,0.3)] transition-all hover:scale-105 active:scale-95"
             >
                 <Plus className="h-5 w-5" />
                 <span>Create Workbook</span>
             </button>
 
             <Modal open={isOpen} onOpenChange={setIsOpen}>
-                <ModalContent size="lg" className="bg-[#0a0a0a] border-white/[0.08] backdrop-blur-xl scrollbar-hidden">
+                <ModalContent size="lg" className="bg-surface border-border backdrop-blur-xl scrollbar-hidden">
                     <ModalHeader className="pb-8">
-                        <ModalTitle className="text-2xl font-bold tracking-tight text-white">New Workbook</ModalTitle>
+                        <ModalTitle className="text-2xl font-bold tracking-tight text-text">New Workbook</ModalTitle>
                     </ModalHeader>
 
                     {
@@ -66,13 +67,13 @@ export const CreateWorkBook: React.FC = () => {
                     <form onSubmit={formik.handleSubmit} className="flex flex-col flex-1 min-h-0">
                         <ModalBody className="space-y-6 px-2 scrollbar-hidden" scrollable={true}>
                             <div className="space-y-2 text-left">
-                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 ml-1">
+                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-text-mid ml-1">
                                     Workbook Name
                                 </label>
                                 <input
                                     autoFocus
                                     name="name"
-                                    className="flex h-12 w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-white placeholder:text-white/20 transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50"
+                                    className="flex h-12 w-full rounded-lg border border-border bg-surface-2 px-4 py-2 text-sm text-text placeholder:text-text-dim transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50"
                                     placeholder="e.g. Advanced Mathematics"
                                     value={formik.values.name}
                                     onChange={formik.handleChange}
@@ -80,12 +81,12 @@ export const CreateWorkBook: React.FC = () => {
                             </div>
 
                             <div className="space-y-2 text-left">
-                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 ml-1">
+                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-text-mid ml-1">
                                     Description (Optional)
                                 </label>
                                 <textarea
                                     name="description"
-                                    className="flex min-h-[100px] w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-white/20 transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50 resize-none"
+                                    className="flex min-h-[100px] w-full rounded-lg border border-border bg-surface-2 px-4 py-3 text-sm text-text placeholder:text-text-dim transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50 resize-none"
                                     placeholder="What's this workbook about?"
                                     value={formik.values.description}
                                     onChange={formik.handleChange}
@@ -93,16 +94,35 @@ export const CreateWorkBook: React.FC = () => {
                             </div>
 
                             <div className="space-y-2 text-left">
-                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/40 ml-1">
+                                <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-text-mid ml-1">
                                     Category Tag
                                 </label>
                                 <input
                                     name="tag"
-                                    className="flex h-12 w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm text-white placeholder:text-white/20 transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50"
+                                    className="flex h-12 w-full rounded-lg border border-border bg-surface-2 px-4 py-2 text-sm text-text placeholder:text-text-dim transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber/50 focus-visible:border-amber/50"
                                     placeholder="e.g. Science, Math, History"
                                     value={formik.values.tag}
                                     onChange={formik.handleChange}
                                 />
+                            </div>
+
+                            <div className="pt-4 border-t border-border flex items-center justify-between">
+                                <div className="space-y-1">
+                                    <label className="text-[10px] uppercase font-bold tracking-[0.2em] text-text-mid ml-1">
+                                        Private Workbook
+                                    </label>
+                                    <p className="text-[11px] text-text-dim ml-1 font-medium">Private workbooks require an invitation or approved request to join.</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="isPrivate"
+                                        className="sr-only peer"
+                                        checked={formik.values.isPrivate}
+                                        onChange={formik.handleChange}
+                                    />
+                                    <div className="w-11 h-6 bg-surface-3 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber"></div>
+                                </label>
                             </div>
                         </ModalBody>
 
@@ -110,14 +130,14 @@ export const CreateWorkBook: React.FC = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsOpen(false)}
-                                className="inline-flex flex-1 items-center justify-center rounded-lg text-xs font-bold uppercase tracking-widest text-white/40 transition-colors hover:text-white hover:bg-white/[0.05] h-12 px-6"
+                                className="inline-flex flex-1 items-center justify-center rounded-lg text-xs font-bold uppercase tracking-widest text-text-mid transition-colors hover:text-text hover:bg-surface-2 h-12 px-6"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 disabled={formik.isSubmitting}
-                                className="inline-flex flex-[2] items-center justify-center rounded-lg text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 bg-gradient-to-br from-amber to-[#ff6b35] text-white hover:opacity-90 hover:shadow-[0_8px_32px_rgba(232,160,32,0.3)] hover:scale-[1.02] active:scale-[0.98] h-12 px-6"
+                                className="inline-flex flex-[2] items-center justify-center rounded-lg text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 bg-gradient-to-br from-amber to-[#ff6b35] text-text hover:opacity-90 hover:shadow-[0_8px_32px_rgba(232,160,32,0.3)] hover:scale-[1.02] active:scale-[0.98] h-12 px-6"
                             >
                                 {formik.isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Create Workbook
