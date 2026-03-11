@@ -17,7 +17,9 @@ export const api = axios.create({
 api.interceptors.request.use(
     async (config) => {
         try {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data } = await supabase.auth.getSession();
+            const session = data?.session;
+            
             if (session?.access_token) {
                 if (!config.headers) config.headers = {} as any;
                 config.headers["Authorization"] = `Bearer ${session.access_token}`;
@@ -27,11 +29,6 @@ api.interceptors.request.use(
         } catch (e) {
             console.error("Interceptors: Error fetching session", e);
         }
-
-        if (config.data instanceof FormData && config.headers) {
-            delete config.headers["Content-Type"];
-        }
-
         return config;
     },
     (error) => Promise.reject(error),
