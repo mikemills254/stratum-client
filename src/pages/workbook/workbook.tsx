@@ -82,7 +82,7 @@ const WorkbookDetail: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        {(role === 'DIRECTOR' || role === 'TEACHER') && (
+                        {(role === 'TEACHER') && (
                             <button
                                 onClick={() => setIsInviteModalOpen(true)}
                                 className="h-10 px-4 flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all font-bold text-[13px]"

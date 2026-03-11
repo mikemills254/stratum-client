@@ -88,7 +88,7 @@ export const WorkbookPage: React.FC = () => {
                                                 <button className="text-text-dim hover:text-text transition-colors"><MoreHorizontal className="h-4 w-4" /></button>
                                             </div>
                                             <h3 className="text-[16px] font-bold text-text leading-snug group-hover:text-amber transition-colors line-clamp-2 pr-4">{book.name || (book as any).name}</h3>
-                                            <p className="text-[13px] text-text-dim">{book.description}</p>
+                                            <p className="text-[13px] text-text-dim line-clamp-3">{book.description}</p>
                                         </div>
                                     </div>
 
