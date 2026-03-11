@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, MoreVertical, UserPlus } from 'lucide-react';
+import { ChevronLeft, UserPlus } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import Wrapper from '../../components/ui/wrapper';
 import StudentDashboard from '../dashboards/studentDashboard';
@@ -91,9 +91,6 @@ const WorkbookDetail: React.FC = () => {
                                 <span>ENROLL</span>
                             </button>
                         )}
-                        <button className="p-2.5 bg-surface border border-black/5 rounded-xl text-text-dim hover:text-text">
-                            <MoreVertical className="h-4 w-4" />
-                        </button>
                     </div>
                 </div>
 

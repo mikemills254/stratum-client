@@ -15,6 +15,7 @@ interface StudentDashboardProps {
 const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
     const [worksheets, setWorksheets] = useState<Worksheet[]>([]);
     const [activeWorksheet, setActiveWorksheet] = useState<Worksheet | null>(null);
+    const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
     const [answers, setAnswers] = useState<Record<string, IAnswer>>({});
     const [loading, setLoading] = useState(true);
     const [submittingId, setSubmittingId] = useState<string | null>(null);
@@ -27,6 +28,9 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
             setWorksheets(wsData);
             if (wsData.length > 0 && !activeWorksheet) {
                 setActiveWorksheet(wsData[0]);
+                if (wsData[0].questions?.length > 0) {
+                    setSelectedQuestionId(wsData[0].questions[0].id);
+                }
             }
         } catch (error) {
             console.error('Error fetching workbook:', error);
@@ -117,8 +121,28 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
 
     const progress = calculateProgress();
 
+    const currentQuestion = activeWorksheet?.questions?.find(q => q.id === selectedQuestionId);
+    const currentAnswer = selectedQuestionId ? answers[selectedQuestionId] : null;
+    const hasAnnotations = !!currentAnswer?.annotations?.length;
+
+    const handleNextQuestion = () => {
+        if (!activeWorksheet?.questions) return;
+        const idx = activeWorksheet.questions.findIndex(q => q.id === selectedQuestionId);
+        if (idx < activeWorksheet.questions.length - 1) {
+            setSelectedQuestionId(activeWorksheet.questions[idx + 1].id);
+        }
+    };
+
+    const handlePrevQuestion = () => {
+        if (!activeWorksheet?.questions) return;
+        const idx = activeWorksheet.questions.findIndex(q => q.id === selectedQuestionId);
+        if (idx > 0) {
+            setSelectedQuestionId(activeWorksheet.questions[idx - 1].id);
+        }
+    };
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 relative transition-all duration-700`}>
             {/* Left Sidebar: Navigation & Progress (col-span-3) */}
             <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-8 h-fit">
                 <div className="p-5 bg-surface border border-black/5 rounded-2xl">
@@ -127,22 +151,51 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                         <h3 className="font-syne text-[11px] font-bold uppercase tracking-[0.2em]">Curriculum</h3>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                         {worksheets.map((ws) => (
-                            <button
-                                key={ws.id}
-                                onClick={() => setActiveWorksheet(ws)}
-                                className={`group w-full text-left p-3 rounded-xl transition-all duration-300 border flex items-center justify-between ${activeWorksheet?.id === ws.id
-                                    ? 'bg-amber/10 border-amber/20 text-amber'
-                                    : 'bg-black/5 border-transparent text-text-dim hover:bg-black/10 hover:text-text'
-                                    }`}
-                            >
-                                <div className="flex flex-col min-w-0 pr-2">
-                                    <span className="text-[13px] font-medium truncate">{ws.title}</span>
-                                    <span className="text-[9px] font-mono opacity-50 uppercase tracking-wider">{ws.questions?.length} Questions</span>
-                                </div>
-                                <ChevronRight className={`h-3.5 w-3.5 transition-transform flex-shrink-0 ${activeWorksheet?.id === ws.id ? 'translate-x-0' : '-translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}`} />
-                            </button>
+                            <div key={ws.id} className="space-y-1">
+                                <button
+                                    onClick={() => {
+                                        setActiveWorksheet(ws);
+                                        if (ws.questions && ws.questions.length > 0) {
+                                            setSelectedQuestionId(ws.questions[0].id);
+                                        }
+                                    }}
+                                    className={`group w-full text-left p-3 rounded-xl transition-all duration-300 border flex items-center justify-between ${activeWorksheet?.id === ws.id
+                                        ? 'bg-amber/10 border-amber/20 text-amber'
+                                        : 'bg-black/5 border-transparent text-text-dim hover:bg-black/10 hover:text-text'
+                                        }`}
+                                >
+                                    <div className="flex flex-col min-w-0 pr-2">
+                                        <span className={`text-[13px] font-bold truncate ${activeWorksheet?.id === ws.id ? 'text-amber' : 'text-text'}`}>{ws.title}</span>
+                                        <span className="text-[9px] font-mono opacity-50 uppercase tracking-wider">{ws.questions?.length || 0} Questions</span>
+                                    </div>
+                                    <ChevronRight className={`h-3.5 w-3.5 transition-transform flex-shrink-0 ${activeWorksheet?.id === ws.id ? 'rotate-90 text-amber' : '-translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}`} />
+                                </button>
+
+                                {activeWorksheet?.id === ws.id && ws.questions && (
+                                    <div className="pl-4 py-1 space-y-1 animate-in slide-in-from-top-2 duration-300">
+                                        {ws.questions.map((q, idx) => {
+                                            const isAnswered = answers[q.id]?.status === 'SUBMITTED' || answers[q.id]?.status === 'GRADED';
+                                            return (
+                                                <button
+                                                    key={q.id}
+                                                    onClick={() => setSelectedQuestionId(q.id)}
+                                                    className={`w-full text-left p-2.5 rounded-lg text-[12px] transition-all flex items-center gap-3 ${selectedQuestionId === q.id
+                                                        ? 'bg-white text-amber font-bold border border-black/5'
+                                                        : 'text-text-mid hover:text-text hover:bg-black/5 border border-transparent'
+                                                        }`}
+                                                >
+                                                    <div className={`h-5 w-5 rounded-md flex items-center justify-center text-[10px] ${selectedQuestionId === q.id ? 'bg-amber text-white' : isAnswered ? 'bg-emerald-500/20 text-emerald-500' : 'bg-black/5'}`}>
+                                                        {isAnswered ? <CheckCircle2 className="h-3 w-3" /> : idx + 1}
+                                                    </div>
+                                                    <span className="truncate flex-1">{q.text}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -175,180 +228,168 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ workbookId }) => {
                 <ActivityLog workbookId={workbookId} title="My Milestones" limit={5} />
             </div>
 
-            {/* Main Content: Questions & Answers (col-span-6) */}
-            <div className="lg:col-span-6 space-y-8">
-                {activeWorksheet ? (
-                    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                        <div className="relative p-8 rounded-3xl bg-surface border border-black/5 overflow-hidden group">
+            {/* Main Content: Focused Single Question (col-span-6 or col-span-9) */}
+            <div className={`lg:transition-all lg:duration-700 ${hasAnnotations ? 'lg:col-span-6' : 'lg:col-span-9'} space-y-8`}>
+                {activeWorksheet && currentQuestion ? (
+                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-4xl mx-auto w-full">
+                        <div className="relative p-10 rounded-[32px] bg-surface border border-black/5 overflow-hidden group shadow-sm">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-amber/5 blur-[100px] rounded-full" />
-                            <div className="relative z-10">
-                                <label className="font-mono text-[10px] text-amber uppercase tracking-[0.3em] mb-3 block opacity-70">Active Worksheet</label>
-                                <h1 className="text-xl font-syne font-bold text-text leading-tight mb-4">{activeWorksheet.title}</h1>
-                                <p className="text-text-mid text-[14px] font-light max-w-2xl leading-relaxed">
-                                    {activeWorksheet.description || "Read the questions carefully and provide your responses in the interactive editors below. Your work is synced in real-time."}
-                                </p>
+                            <div className="relative z-10 space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <label className="font-mono text-[10px] text-amber uppercase tracking-[0.3em] opacity-70">
+                                        {activeWorksheet.title} // Question {(activeWorksheet.questions?.findIndex(q => q.id === selectedQuestionId) ?? 0) + 1}
+                                    </label>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={handlePrevQuestion}
+                                            disabled={!activeWorksheet.questions || activeWorksheet.questions.indexOf(currentQuestion) === 0}
+                                            className="p-2 rounded-lg hover:bg-black/5 disabled:opacity-30 transition-all"
+                                        >
+                                            <ChevronRight className="h-4 w-4 rotate-180" />
+                                        </button>
+                                        <button
+                                            onClick={handleNextQuestion}
+                                            disabled={!activeWorksheet.questions || activeWorksheet.questions.indexOf(currentQuestion) === activeWorksheet.questions.length - 1}
+                                            className="p-2 rounded-lg hover:bg-black/5 disabled:opacity-30 transition-all"
+                                        >
+                                            <ChevronRight className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <h1 className="text-2xl font-syne font-bold text-text leading-tight tracking-tight">{currentQuestion.text}</h1>
+                                {currentQuestion.isRequired && (
+                                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-amber/10 border border-amber/20">
+                                        <div className="h-1 w-1 rounded-full bg-amber animate-pulse" />
+                                        <span className="text-[9px] font-mono text-amber uppercase tracking-widest font-bold">Required Response</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div className="space-y-16">
-                            {(activeWorksheet.questions ?? []).map((q, idx) => {
-                                const answer = answers[q.id];
-                                const isSubmitted = answer?.status === 'SUBMITTED' || answer?.status === 'GRADED';
+                        <div className="space-y-6">
+                            <div className="relative group/q">
+                                <div className="absolute -left-10 top-0 bottom-0 w-px bg-black/5 group-hover/q:bg-amber/10 transition-colors hidden lg:block" />
 
-                                return (
-                                    <div key={q.id} className="group/q space-y-6 relative">
-                                        <div className="flex items-center gap-4">
-                                            <div className={`h-10 w-10 rounded-2xl flex items-center justify-center font-bold text-[14px] transition-all duration-500 ${isSubmitted ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'bg-amber/10 text-amber border border-amber/20'
-                                                }`}>
-                                                {isSubmitted ? <CheckCircle2 className="h-5 w-5" /> : idx + 1}
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="text-[18px] font-bold text-text leading-relaxed font-syne">
-                                                    {q.text}
-                                                </h3>
-                                                {q.isRequired && <span className="text-[9px] font-mono text-amber/60 uppercase tracking-widest mt-1 block">Required Response</span>}
-                                            </div>
-                                        </div>
-
-                                        <div className="pl-14 space-y-6">
-                                            <div className="relative">
-                                                <div className="absolute -left-14 top-0 bottom-0 w-px bg-black/5 group-hover/q:bg-amber/10 transition-colors" />
-
-                                                {answer?.id ? (
-                                                    <div className="space-y-4">
-                                                        {answer.status === 'GRADED' && (
-                                                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald/10 border border-emerald/20 w-fit">
-                                                                <Award className="h-3.5 w-3.5 text-emerald" />
-                                                                <span className="text-[10px] font-mono text-emerald uppercase tracking-widest font-bold">
-                                                                    Answer Locked (GRADED)
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                        <Editor
-                                                            documentName={`answer:${answer.id}`}
-                                                            placeholder="Focus your thoughts here..."
-                                                            readOnly={answer.status === 'GRADED'}
-                                                            onUpdateText={(text) => handleTextUpdate(q.id, text)}
-                                                            onUpdateAnnotations={(newAnns) => {
-                                                                setAnswers(prev => ({
-                                                                    ...prev,
-                                                                    [q.id]: { ...prev[q.id], annotations: newAnns }
-                                                                }));
-                                                            }}
-                                                            initialContent={answer?.text || ''}
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <div className="h-[140px] flex items-center justify-center bg-surface border border-black/5 rounded-xl text-[10px] font-mono text-text-dim uppercase tracking-widest animate-pulse">
-                                                        Initializing Editor...
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="flex items-center justify-between pt-4 border-t border-black/5">
-                                                <div className="flex items-center gap-4 text-[11px] font-mono text-text-dim uppercase tracking-wider">
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Clock className="h-3.5 w-3.5" />
-                                                        Estimated: 15 mins
+                                {currentAnswer?.id ? (
+                                    <div className="space-y-6">
+                                        {currentAnswer.status === 'GRADED' && (
+                                            <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-emerald/10 border border-emerald/20 w-fit shadow-sm">
+                                                <div className="h-6 w-6 rounded-lg bg-emerald/20 flex items-center justify-center text-emerald font-bold text-[12px]">
+                                                    {currentAnswer.grade?.score}
+                                                </div>
+                                                <div className="flex flex-col text-left">
+                                                    <span className="text-[10px] font-mono text-emerald uppercase tracking-widest font-bold leading-none">
+                                                        Grade Achieved
+                                                    </span>
+                                                    <span className="text-[9px] font-mono text-emerald/60 uppercase tracking-[0.1em] mt-1">
+                                                        Answer Locked
                                                     </span>
                                                 </div>
-
-                                                {answer?.status !== 'GRADED' && (
-                                                    <button
-                                                        onClick={() => handleAnswerSubmission(q.id)}
-                                                        disabled={submittingId === q.id}
-                                                        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-amber text-black font-bold text-[12px] uppercase tracking-widest transition-all hover:scale-105 hover:bg-white active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
-                                                    >
-                                                        {submittingId === q.id ? (
-                                                            <>
-                                                                <div className="h-3 w-3 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                                                                Submitting...
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <Send className="h-3.5 w-3.5" />
-                                                                {answer?.status === 'SUBMITTED' ? 'Update Submission' : 'Submit Answer'}
-                                                            </>
-                                                        )}
-                                                    </button>
-                                                )}
-
-                                                {answer?.status === 'GRADED' && (
-                                                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 border border-emerald/20 text-emerald text-[11px] font-bold uppercase tracking-widest">
-                                                        <CheckCircle2 className="h-4 w-4" />
-                                                        Graded & Returned
-                                                    </div>
-                                                )}
                                             </div>
-
+                                        )}
+                                        <div className="bg-surface rounded-[32px] border border-black/5 shadow-xl shadow-black/[0.02] overflow-hidden min-h-[500px]">
+                                            <Editor
+                                                key={currentAnswer.id}
+                                                documentName={`answer:${currentAnswer.id}`}
+                                                placeholder="Start typing your response here..."
+                                                readOnly={currentAnswer.status === 'GRADED'}
+                                                hideMetadata={true}
+                                                onUpdateText={(text) => handleTextUpdate(currentQuestion.id, text)}
+                                                onUpdateAnnotations={(newAnns) => {
+                                                    setAnswers(prev => ({
+                                                        ...prev,
+                                                        [currentQuestion.id]: { ...prev[currentQuestion.id], annotations: newAnns }
+                                                    }));
+                                                }}
+                                                initialContent={currentAnswer?.text || ''}
+                                            />
                                         </div>
                                     </div>
-                                );
-                            })}
+                                ) : (
+                                    <div className="h-[400px] flex items-center justify-center bg-surface border border-black/5 rounded-[32px] text-[10px] font-mono text-text-dim uppercase tracking-widest animate-pulse">
+                                        Initializing Workspace...
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex items-center justify-between p-6 bg-surface/50 rounded-2xl border border-black/5">
+                                <div className="flex items-center gap-6 text-[11px] font-mono text-text-dim uppercase tracking-wider">
+                                    <span className="flex items-center gap-1.5">
+                                        <Clock className="h-3.5 w-3.5" />
+                                        Auto-saving enabled
+                                    </span>
+                                </div>
+
+                                {currentAnswer?.status !== 'GRADED' && (
+                                    <button
+                                        onClick={() => handleAnswerSubmission(currentQuestion.id)}
+                                        disabled={submittingId === currentQuestion.id}
+                                        className="flex items-center gap-3 px-8 py-3 rounded-xl bg-text text-bg font-bold text-[13px] uppercase tracking-widest transition-all hover:bg-amber hover:text-text active:scale-95 disabled:opacity-50 shadow-lg shadow-black/5"
+                                    >
+                                        {submittingId === currentQuestion.id ? (
+                                            <>
+                                                <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="h-4 w-4" />
+                                                {currentAnswer?.status === 'SUBMITTED' ? 'Update Submission' : 'Submit Final Answer'}
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+
+                                {currentAnswer?.status === 'GRADED' && (
+                                    <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-emerald/10 text-emerald text-[12px] font-bold uppercase tracking-widest">
+                                        <Award className="h-4.5 w-4.5" />
+                                        <span>Grade: {currentAnswer.grade?.score}</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="h-[500px] flex flex-col items-center justify-center border border-black/5 rounded-3xl bg-surface/50 backdrop-blur-sm p-12 text-center">
-                        <div className="h-16 w-16 rounded-2xl bg-black/5 flex items-center justify-center mb-6">
-                            <FileText className="h-8 w-8 text-text-dim opacity-20" />
+                    <div className="h-[500px] flex flex-col items-center justify-center border border-black/5 rounded-[40px] bg-surface/50 backdrop-blur-sm p-12 text-center max-w-2xl mx-auto w-full">
+                        <div className="h-20 w-20 rounded-3xl bg-black/5 flex items-center justify-center mb-8">
+                            <FileText className="h-10 w-10 text-text-dim opacity-20" />
                         </div>
-                        <h3 className="text-xl font-syne font-bold text-text mb-2 tracking-tight">Select a Worksheet</h3>
-                        <p className="text-text-dim text-[14px] font-light max-w-xs">Pick a task from the curriculum to begin your educational journey.</p>
+                        <h3 className="text-2xl font-syne font-bold text-text mb-3 tracking-tight">Select a Question</h3>
+                        <p className="text-text-dim text-[15px] font-light max-w-sm leading-relaxed">Choose a specific question from the curriculum on the left to begin your response.</p>
                     </div>
                 )}
             </div>
 
-            {/* Right Sidebar: Annotations (col-span-3) */}
-            <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-8 h-fit max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar pr-2">
-                <div className="p-5 bg-surface border border-black/5 rounded-2xl">
-                    <div className="flex items-center gap-2 text-blue-500 mb-6">
-                        <MessageSquare className="h-4 w-4" />
-                        <h3 className="font-syne text-[11px] font-bold uppercase tracking-[0.2em]">Teacher Feedback</h3>
-                    </div>
+            {/* Right Sidebar: Annotations (col-span-3) - Only if selected question has annotations */}
+            {hasAnnotations && (
+                <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-8 h-fit max-h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar pr-2 animate-in fade-in slide-in-from-right-4 duration-700">
+                    <div className="p-5 bg-surface border border-black/5 rounded-2xl shadow-sm">
+                        <div className="flex items-center gap-2 text-blue-500 mb-6">
+                            <MessageSquare className="h-4 w-4" />
+                            <h3 className="font-syne text-[11px] font-bold uppercase tracking-[0.2em]">Annotations</h3>
+                        </div>
 
-                    <div className="space-y-4">
-                        {activeWorksheet && activeWorksheet.questions ? (
-                            activeWorksheet.questions.map(q => {
-                                const answer = answers[q.id];
-                                if (!answer?.annotations || answer.annotations.length === 0) return null;
-
-                                return (
-                                    <div key={`annotations-group-${q.id}`} className="space-y-3">
-                                        <div className="text-[11px] font-mono text-text-dim uppercase tracking-wider border-b border-black/5 pb-1 mb-2">
-                                            Q: {q.text.length > 30 ? q.text.substring(0, 30) + '...' : q.text}
+                        <div className="space-y-4">
+                            {currentAnswer?.annotations?.map((annot) => (
+                                <div key={annot.id} className="p-4 rounded-xl relative bg-blue-500/5 border border-blue-500/10 hover:bg-blue-500/[0.08] transition-colors">
+                                    <div className="flex items-start gap-3">
+                                        <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex-shrink-0 flex items-center justify-center text-[11px] font-bold text-blue-600 uppercase border border-blue-500/10">
+                                            {annot.teacher.username.charAt(0)}
                                         </div>
-                                        {answer.annotations.map((annot) => (
-                                            <div key={annot.id} className="p-4 rounded-xl relative bg-blue-500/5 border border-blue-500/10">
-                                                <div className="flex items-start gap-3">
-                                                    <div className="h-6 w-6 rounded-md bg-blue-500/20 flex-shrink-0 flex items-center justify-center text-[9px] font-bold text-blue-600 uppercase">
-                                                        {annot.teacher.username.charAt(0)}
-                                                    </div>
-                                                    <div className="flex-1 min-w-0 space-y-1">
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-[11px] font-bold text-text">{annot.teacher.username}</span>
-                                                            <span className="text-[9px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span>
-                                                        </div>
-                                                        <p className="text-[12px] text-text-mid leading-relaxed break-words">{annot.comment}</p>
-                                                    </div>
-                                                </div>
+                                        <div className="flex-1 min-w-0 space-y-1">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[12px] font-bold text-text">{annot.teacher.username}</span>
+                                                <span className="text-[9px] font-mono text-text-dim">{new Date(annot.createdAt).toLocaleDateString()}</span>
                                             </div>
-                                        ))}
+                                            <p className="text-[13px] text-text-mid leading-relaxed break-words">{annot.comment}</p>
+                                        </div>
                                     </div>
-                                );
-                            })
-                        ) : (
-                            <p className="text-[12px] text-text-dim text-center py-8 px-4 opacity-60">
-                                Select a worksheet to review teacher feedback and annotations on your submitted answers.
-                            </p>
-                        )}
-                        {activeWorksheet?.questions?.every(q => !answers[q.id]?.annotations?.length) && (
-                            <p className="text-[12px] text-text-dim text-center py-8 px-4 opacity-60">
-                                No feedback available for this worksheet yet.
-                            </p>
-                        )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

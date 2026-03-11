@@ -18,6 +18,7 @@ interface EditorProps {
     onUpdateText?: (text: string) => void;
     onUpdateAnnotations?: (annotations: any[]) => void;
     initialContent?: string;
+    hideMetadata?: boolean;
 }
 
 export interface EditorRef {
@@ -31,7 +32,8 @@ const Editor = forwardRef<EditorRef, EditorProps>(({
     onStatusChange,
     onUpdateText,
     onUpdateAnnotations,
-    initialContent = ''
+    initialContent = '',
+    hideMetadata = false
 }, ref) => {
     const [content, setContent] = useState(initialContent);
     const [awarenessUsers, setAwarenessUsers] = useState<AwareUser[]>([]);
@@ -169,53 +171,56 @@ const Editor = forwardRef<EditorRef, EditorProps>(({
     };
 
     return (
-        <div className="relative w-full border border-black/5 rounded-xl bg-surface overflow-hidden transition-all duration-300 hover:border-black/10 flex flex-col min-h-[140px]">
+        <div className={`relative w-full flex flex-col min-h-[140px] transition-all duration-300 ${hideMetadata ? 'bg-transparent border-none' : 'border border-black/5 rounded-xl bg-surface hover:border-black/10'
+            }`}>
             {/* Sync & Presence Header */}
-            <div className="absolute top-2 left-2 right-2 z-10 flex items-center justify-between pointer-events-none">
-                {/* Status & Mode Badges */}
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md border border-black/5 whitespace-nowrap">
-                        <div className={`h-1.5 w-1.5 rounded-full transition-colors duration-300 ${status === 'connected'
-                            ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'
-                            : status === 'connecting'
-                                ? 'bg-amber-500 animate-pulse'
-                                : 'bg-red-500'
-                            }`} />
-                        <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-text-dim">
-                            {status === 'connected' ? 'Live' : status === 'connecting' ? 'Syncing...' : 'Offline'}
-                        </span>
-                    </div>
-
-                    {readOnly && (
-                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/5 backdrop-blur-md border border-black/10 whitespace-nowrap">
-                            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-amber/80">
-                                View Only
+            {!hideMetadata && (
+                <div className="absolute top-2 left-2 right-2 z-10 flex items-center justify-between pointer-events-none">
+                    {/* Status & Mode Badges */}
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md border border-black/5 whitespace-nowrap">
+                            <div className={`h-1.5 w-1.5 rounded-full transition-colors duration-300 ${status === 'connected'
+                                ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'
+                                : status === 'connecting'
+                                    ? 'bg-amber-500 animate-pulse'
+                                    : 'bg-red-500'
+                                }`} />
+                            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-text-dim">
+                                {status === 'connected' ? 'Live' : status === 'connecting' ? 'Syncing...' : 'Offline'}
                             </span>
                         </div>
-                    )}
-                </div>
 
-                {/* Presence Avatars */}
-                <div className="flex items-center -space-x-1.5 overflow-hidden pointer-events-auto pr-1">
-                    {awarenessUsers.map((user, idx) => (
-                        <div
-                            key={`${user.id}-${idx}`}
-                            className={`relative h-6 w-6 rounded-full border-2 border-surface flex items-center justify-center text-[9px] font-bold text-text transition-transform hover:scale-110 cursor-help group ${getRoleColor(user.role)}`}
-                        >
-                            {getInitials(user.name)}
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black/90 text-[9px] text-text opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-black/10 backdrop-blur-md shadow-xl z-50">
-                                <div className="flex flex-col items-center">
-                                    <span className="font-bold">{user.name}</span>
-                                    <span className="text-[8px] uppercase tracking-wider text-text-dim opacity-70">{user.role}</span>
+                        {readOnly && (
+                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/5 backdrop-blur-md border border-black/10 whitespace-nowrap">
+                                <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-amber/80">
+                                    View Only
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Presence Avatars */}
+                    <div className="flex items-center -space-x-1.5 overflow-hidden pointer-events-auto pr-1">
+                        {awarenessUsers.map((user, idx) => (
+                            <div
+                                key={`${user.id}-${idx}`}
+                                className={`relative h-6 w-6 rounded-full border-2 border-surface flex items-center justify-center text-[9px] font-bold text-text transition-transform hover:scale-110 cursor-help group ${getRoleColor(user.role)}`}
+                            >
+                                {getInitials(user.name)}
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded bg-black/90 text-[9px] text-text opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity pointer-events-none border border-black/10 backdrop-blur-md shadow-xl z-50">
+                                    <div className="flex flex-col items-center">
+                                        <span className="font-bold">{user.name}</span>
+                                        <span className="text-[8px] uppercase tracking-wider text-text-dim opacity-70">{user.role}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Editor content */}
-            <div className="flex-1 w-full p-6 pt-10">
+            <div className={`flex-1 w-full ${hideMetadata ? 'p-10' : 'p-6 pt-10'}`}>
                 <textarea
                     ref={textareaRef}
                     value={content}
